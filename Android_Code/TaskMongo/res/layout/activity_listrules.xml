@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" 
+    android:background="@color/off_white">
+
+    <RelativeLayout
+        android:id="@+id/headerLayout"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/black">
+
+        
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="Rules"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/btnAdd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerInParent="true"
+            android:drawablePadding="5dp"
+            android:gravity="center"
+            android:text="Add Rule"
+            android:padding="10dp"
+            android:textColor="@color/blue"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+    </RelativeLayout>
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:background="@color/light_grey"
+        android:padding="5dp"
+        android:textColor="@color/light_black"
+        android:textStyle="bold"
+        android:textSize="14sp"
+        android:layout_height="wrap_content"
+        android:text="Swipe left to delete any Rule" />
+    
+    <ListView 
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:id="@+id/listRoles"
+        ></ListView>
+</LinearLayout>
