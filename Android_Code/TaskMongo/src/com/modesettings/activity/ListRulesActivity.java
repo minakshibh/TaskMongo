@@ -67,6 +67,7 @@ public class ListRulesActivity extends Activity {
 			if (v == addRule) {
 				Intent intent = new Intent(ListRulesActivity.this,
 						SettingsActivity.class);
+				intent.putExtra("trigger", "new");
 				startActivity(intent);
 			} 
 		}
@@ -75,6 +76,7 @@ public class ListRulesActivity extends Activity {
 	public class RuleAdapter extends BaseSwipeAdapter {
 		private Context context;
 		private TextView ruleName, ruleTimings, deleteRule, days;
+		private TextView editRule;
 		private ImageView ruleMode;
 
 		public RuleAdapter(Context ctx) {
@@ -106,6 +108,8 @@ public class ListRulesActivity extends Activity {
 			ruleMode = (ImageView) convertView.findViewById(R.id.mode);
 			ruleTimings = (TextView) convertView.findViewById(R.id.timings);
 			deleteRule = (TextView) convertView.findViewById(R.id.deleteRule);
+			editRule = (TextView) convertView.findViewById(R.id.editRule);
+			
 			days = (TextView) convertView.findViewById(R.id.days);
 
 			ruleName.setText(rules.get(position).getDescription());
@@ -166,6 +170,19 @@ public class ListRulesActivity extends Activity {
 								}
 							});
 					alert.show();
+				}
+			});
+			
+			editRule.setOnClickListener(new View.OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					// TODO Auto-generated method stub
+					Intent mainIntent = new Intent(ListRulesActivity.this,
+							SettingsActivity.class);
+					mainIntent.putExtra("trigger", "edit");
+					mainIntent.putExtra("Rule", rules.get(position));
+					ListRulesActivity.this.startActivity(mainIntent);
 				}
 			});
 		}

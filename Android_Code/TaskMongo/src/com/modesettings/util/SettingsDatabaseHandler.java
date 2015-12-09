@@ -115,6 +115,10 @@ public class SettingsDatabaseHandler extends SQLiteOpenHelper {
 		deleteAlarmData();
 	}
 	
+	public void deleteTimingsData(int id ,SQLiteDatabase db){
+		db.delete(TABLE_TIMINGS_DATA, Rule_Id +" = ? ", new String[] { String.valueOf(id) });
+	}
+	
 	// edit rule
 	public void updateRule(ArrayList<Rule> rules) {
 		SQLiteDatabase db = this.getWritableDatabase();
@@ -149,8 +153,7 @@ public class SettingsDatabaseHandler extends SQLiteOpenHelper {
 	}
 
 	// Save rule
-	public int saveRule(Rule rule) {
-		int ruleId = -1;
+	public int saveRule(Rule rule, int ruleId) {
 		
 		SQLiteDatabase db = this.getWritableDatabase();
 
@@ -162,8 +165,15 @@ public class SettingsDatabaseHandler extends SQLiteOpenHelper {
 				values.put(Description, rule.getDescription());
 				values.put(Selected_Days, rule.getSelectedDays());
 				
-				// Insert rule
-				ruleId = (int) db.insert(TABLE_RULES, null, values);
+				if(ruleId!=-1){
+					
+					db.update(TABLE_RULES, values, Id + " = ? ", new String[] { String.valueOf(ruleId)});
+					deleteTimingsData(ruleId, db);
+					
+				}else{
+					// Insert rule
+					ruleId = (int) db.insert(TABLE_RULES, null, values);
+				}
 				
 				for(int i = 0; i<rule.getTimingsData().size(); i++){
 					TimingsData timingsData = rule.getTimingsData().get(i);
@@ -179,7 +189,6 @@ public class SettingsDatabaseHandler extends SQLiteOpenHelper {
 					
 					// Insert rule data
 					int dataId = (int) db.insert(TABLE_TIMINGS_DATA, null, value);
-					
 				}
 				
 				

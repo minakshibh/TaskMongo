@@ -1,13 +1,28 @@
 package com.modesettings.model;
 
 import java.util.ArrayList;
+import android.os.Parcel;
+import android.os.Parcelable;
 
-public class Rule {
+public class Rule implements Parcelable{
 
 	private String startTime, endTime, mode, description, selectedDays;
 	private int id;
 	private ArrayList<TimingsData> timingsData;
 	
+	public Rule(){
+		
+	}
+	 public Rule(Parcel source) {
+		 startTime = source.readString();
+		 endTime = source.readString();
+		 mode = source.readString();
+		 description = source.readString();
+		 selectedDays = source.readString();
+		 id = source.readInt();
+	}
+	 
+	 
 	public String getStartTime() {
 		return startTime;
 	}
@@ -49,5 +64,35 @@ public class Rule {
 	}
 	public void setTimingsData(ArrayList<TimingsData> timingsData) {
 		this.timingsData = timingsData;
+	}
+	
+	public static final Parcelable.Creator<Rule> CREATOR
+	  = new Parcelable.Creator<Rule>() 
+	{
+	       public Rule createFromParcel(Parcel in) 
+	       {
+	           return new Rule(in);
+	       }
+
+	       public Rule[] newArray (int size) 
+	       {
+	           return new Rule[size];
+	       }
+	};
+
+	@Override
+	public int describeContents() {
+		// TODO Auto-generated method stub
+		return this.hashCode();
+	}
+
+	@Override
+	public void writeToParcel(Parcel dest, int flags) {
+		dest.writeString(startTime);
+		dest.writeString(endTime);
+		dest.writeString(mode);
+		dest.writeString(description);
+		dest.writeString(selectedDays);
+		dest.writeInt(id);
 	}
 }

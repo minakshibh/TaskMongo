@@ -41,13 +41,17 @@ public class SettingsActivity extends Activity {
 	private ArrayList<Integer> days;
 	private SimpleDateFormat formatter;
 	private Calendar calendar;
+	private String trigger;
+	private Rule rule;
+	private int ruleId = -1;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_settings);
-
+		days = new ArrayList<Integer>();
+		
 		/*IntentFilter filter = new IntentFilter(TaskMongoAlarmReceiver.ACTION_ALARM);
 		BroadcastReceiver mReceiver = new TaskMongoAlarmReceiver();
 		registerReceiver(mReceiver, filter);*/
@@ -96,20 +100,71 @@ public class SettingsActivity extends Activity {
 		tgModes[SILENT].setOnCheckedChangeListener(checkedChangeListener);
 		tgModes[VIBRATE].setOnCheckedChangeListener(checkedChangeListener);
 		
-		initDays();
+		
+		trigger = getIntent().getStringExtra("trigger");
+		if(trigger.equals("edit")){
+						
+			rule = getIntent().getParcelableExtra("Rule");
+			ruleId = rule.getId();
+			
+			desc.setText(rule.getDescription());
+			
+			String[] startTime = rule.getStartTime().split(":");
+			startTimePicker.setCurrentHour(Integer.parseInt(startTime[0]));
+			startTimePicker.setCurrentMinute(Integer.parseInt(startTime[1]));
+			
+			String[] endTime = rule.getEndTime().split(":");
+			endTimePicker.setCurrentHour(Integer.parseInt(endTime[0]));
+			endTimePicker.setCurrentMinute(Integer.parseInt(endTime[1]));
+				
+			String[] selection = rule.getSelectedDays().split(", ");
+			
+			for(int i = 0; i<selection.length; i++){
+				days.add(getDayIndex(selection[i]));
+			}
+			
+			String mode = rule.getMode();
+			if(mode.equals(TaskMongoAlarmReceiver.NORMAL_MODE))
+				tgModes[NORMAL].setChecked(true);
+			else if(mode.equals(TaskMongoAlarmReceiver.VIBRATE_MODE))
+				tgModes[VIBRATE].setChecked(true);
+			else if(mode.equals(TaskMongoAlarmReceiver.SILENT_MODE))
+				tgModes[SILENT].setChecked(true);
+				
+			/*
+			private ToggleButton[] tgModes = new ToggleButton[3];
+			
+			private String selectedMode = "";
+			private ArrayList<Integer> days;
+			private SimpleDateFormat formatter;
+			private Calendar calendar;
+			private String trigger;
+			private Rule rule;*/
+		}
+		initDays(trigger);
 	}
 
-	private void initDays() {
+	private void initDays(String trigger) {
 		// TODO Auto-generated method stub
-		
-		int curDay = calendar.get(Calendar.DAY_OF_WEEK);
-		
-		for(int i = 0; i < tgWeekDays.length; i++){
-			if(tgWeekDays[i].getTag().equals(curDay))
-				tgWeekDays[i].setChecked(true);
-			else
-				tgWeekDays[i].setChecked(false);
+		if(trigger.equals("edit")){
+			for(int i = 0; i < tgWeekDays.length; i++){
+				if(days.contains(tgWeekDays[i].getTag()))
+					tgWeekDays[i].setChecked(true);
+				else
+					tgWeekDays[i].setChecked(false);
+			}
+		}else{
+			int curDay = calendar.get(Calendar.DAY_OF_WEEK);
+			
+			for(int i = 0; i < tgWeekDays.length; i++){
+				if(tgWeekDays[i].getTag().equals(curDay))
+					tgWeekDays[i].setChecked(true);
+				else
+					tgWeekDays[i].setChecked(false);
+			}
 		}
+		
+		days.clear();
 	}
 
 	private OnCheckedChangeListener checkedChangeListener = new OnCheckedChangeListener() {
@@ -234,6 +289,24 @@ public class SettingsActivity extends Activity {
     		return "";
     	}
     }
+    private int getDayIndex(String day){
+    	if(day.trim().equals("Sun"))
+    		return Calendar.SUNDAY;
+    	else if(day.trim().equals("Mon"))
+    		return Calendar.MONDAY;
+    	else if(day.trim().equals("Tue"))
+    		return Calendar.TUESDAY;
+    	else if(day.trim().equals("Wed"))
+    		return Calendar.WEDNESDAY;
+    	else if(day.trim().equals("Thur"))
+    		return Calendar.THURSDAY;
+    	else if(day.trim().equals("Fri"))
+    		return Calendar.FRIDAY;
+    	else if(day.trim().equals("Sat"))
+    		return Calendar.SATURDAY;
+    	else
+    		return 0;    	
+    }
     
 	private void saveRule(){
 		Rule rule = new Rule();
@@ -349,7 +422,7 @@ public class SettingsActivity extends Activity {
 		rule.setTimingsData(timingsData);
 		
 		SettingsDatabaseHandler dbHandler = new SettingsDatabaseHandler(SettingsActivity.this);
-		int id = dbHandler.saveRule(rule);
+		int id = dbHandler.saveRule(rule, ruleId);
 		
 		if(id!=-1){
 //			Rule savedRule = dbHandler.getRule(id);
@@ -413,8 +486,8 @@ public class SettingsActivity extends Activity {
 	}
 
 	private ArrayList<Integer> getSelectedDays() {
-		days = new ArrayList<Integer>();
 
+		days.clear();
 		for (int i = 0; i < tgWeekDays.length; i++) {
 			if (tgWeekDays[i].isChecked()) {
 					days.add(Integer.parseInt(tgWeekDays[i].getTag().toString()));

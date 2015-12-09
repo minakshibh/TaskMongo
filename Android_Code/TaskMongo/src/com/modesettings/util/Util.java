@@ -8,6 +8,7 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.sax.EndTextElementListener;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -17,7 +18,8 @@ import com.modesettings.model.TimingsData;
 public class Util {
 
 	private static Context context;
-
+	public static long milliSecondsForWeek = 7 * 24 * 60 * 60 * 1000;
+	
 //	public static ArrayList<Integer> alarmDataIds = new ArrayList<Integer>();
  	/*
 	 * public static void setRule(Context ctx, Rule rule) { context = ctx;
@@ -133,8 +135,7 @@ public class Util {
 			// long timeInMillis = date.getTime();
 
 			if(repeat){
-				alarms.setRepeating(AlarmManager.RTC_WAKEUP, dateTimeOfAlarm, 7
-					* 24 * 60 * 60 * 1000, pIntent);
+				alarms.setRepeating(AlarmManager.RTC_WAKEUP, dateTimeOfAlarm, milliSecondsForWeek, pIntent);
 			}else{
 				alarms.set(AlarmManager.RTC_WAKEUP, dateTimeOfAlarm, pIntent);
 			}
@@ -182,24 +183,27 @@ public class Util {
 								.getTimeInMillis(bookedUntilTime
 										.getEndTimings())) {
 
+					long curTime = System.currentTimeMillis();
+					
 					if (timingData.getType().equals(
 							TaskMongoAlarmReceiver.ACTION_START)) {
 						
 						
 						dbHandler.saveAlarmData(timingData.getTimingsDataId());
-						if(startTimings < System.currentTimeMillis()){
-							Log.e("alarm set 4", "mode: " + timingData.getMode() + " ,, id: " + timingData.getTimingsDataId() + " ,time: "
-									+ timingData.getTimings());
-							dbHandler.saveAlarmData(1234569789);
-							setDateTimeOfAlarm(startTimings, timingData.getMode(),
-									1234569789, context, false);
-							
-							setDateTimeOfAlarm(startTimings + (7 * 24 * 60 * 60 * 1000), timingData.getMode(),
-									timingData.getTimingsDataId(), context, true);
-						}else{
-							setDateTimeOfAlarm(startTimings, timingData.getMode(),
-									timingData.getTimingsDataId(), context, true);
+						
+						if(startTimings < curTime){
+							if(timingData.getTimeInMillis(timingData.getEndTimings()) > curTime){
+								Log.e("alarm set 4", "mode: " + timingData.getMode() + " ,, id: " + timingData.getTimingsDataId() + " ,time: "
+										+ timingData.getTimings());
+								dbHandler.saveAlarmData(timingData.getTimingsDataId() + TaskMongoAlarmReceiver.timeLapse);
+								setDateTimeOfAlarm(curTime, timingData.getMode(),
+										timingData.getTimingsDataId() + TaskMongoAlarmReceiver.timeLapse, context, false);
+							}
+							Log.e("shifted time", "one week forward");
+							startTimings = startTimings + milliSecondsForWeek;
 						}
+						setDateTimeOfAlarm(startTimings, timingData.getMode(),
+									timingData.getTimingsDataId(), context, true);
 						
 						Log.e("alarm set 1", "mode: " + timingData.getMode() + " ,, id: " + timingData.getTimingsDataId() + " ,time: "
 								+ timingData.getTimings());
@@ -221,19 +225,47 @@ public class Util {
 							}
 						}
 						if (null == selectedRule){
-							Log.e("alarm set 2", "mode: " + TaskMongoAlarmReceiver.NORMAL_MODE + " ,, id: " + timingData.getTimingsDataId() + " ,time: "
-									+ timingData.getTimings());
 							dbHandler.saveAlarmData(timingData.getTimingsDataId());
+							
+							if(startTimings < curTime){
+								if(j==timingsDataList.size()-1){
+									Log.e("alarm set 4", "mode: " +  TaskMongoAlarmReceiver.NORMAL_MODE + " ,, id: " + timingData.getTimingsDataId() + " ,time: "
+											+ timingData.getTimings());
+									dbHandler.saveAlarmData(timingData.getTimingsDataId() + TaskMongoAlarmReceiver.timeLapse);
+									
+									setDateTimeOfAlarm(curTime, TaskMongoAlarmReceiver.NORMAL_MODE,
+											timingData.getTimingsDataId() + TaskMongoAlarmReceiver.timeLapse, context, false);
+								}
+								startTimings = startTimings + milliSecondsForWeek;
+								Log.e("shifted time", "one week forward");
+							}
 							setDateTimeOfAlarm(startTimings,
 									TaskMongoAlarmReceiver.NORMAL_MODE,
 									timingData.getTimingsDataId(), context, true);
-						}else{
-							Log.e("alarm set 3", "mode: " + selectedRule.getMode() + " ,, id: " + timingData.getTimingsDataId() + " ,time: "
+							Log.e("alarm set 2", "mode: " + TaskMongoAlarmReceiver.NORMAL_MODE + " ,, id: " + timingData.getTimingsDataId() + " ,time: "
 									+ timingData.getTimings());
+							
+						}else{
 							dbHandler.saveAlarmData(timingData.getTimingsDataId());
+							
+							if(startTimings < curTime){
+								if(timingData.getTimeInMillis(selectedRule.getEndTime()) > curTime){
+									Log.e("alarm set 4", "mode: " + selectedRule.getMode() + " ,, id: " + timingData.getTimingsDataId() + " ,time: "
+											+ timingData.getTimings());
+									dbHandler.saveAlarmData(timingData.getTimingsDataId() + TaskMongoAlarmReceiver.timeLapse);
+									
+									setDateTimeOfAlarm(curTime, selectedRule.getMode(),
+											timingData.getTimingsDataId() + TaskMongoAlarmReceiver.timeLapse, context, false);
+								}
+								startTimings = startTimings + milliSecondsForWeek;
+								Log.e("shifted time", "one week forward");
+							}
 							setDateTimeOfAlarm(startTimings,
 									selectedRule.getMode(),
 									timingData.getTimingsDataId(), context, true);
+							Log.e("alarm set 3", "mode: " + selectedRule.getMode() + " ,, id: " + timingData.getTimingsDataId() + " ,time: "
+									+ timingData.getTimings());
+							
 						}
 					}
 				}
