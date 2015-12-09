@@ -3,6 +3,7 @@ package com.modesettings.util;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+import android.R.bool;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -100,7 +101,7 @@ public class Util {
 	}
 
 	private static void setDateTimeOfAlarm(long dateTimeOfAlarm, String mode,
-			int id, Context ctx) {
+			int id, Context ctx, boolean repeat) {
 
 		context = ctx;
 		try {
@@ -131,8 +132,12 @@ public class Util {
 			
 			// long timeInMillis = date.getTime();
 
-			alarms.setRepeating(AlarmManager.RTC_WAKEUP, dateTimeOfAlarm, 7
+			if(repeat){
+				alarms.setRepeating(AlarmManager.RTC_WAKEUP, dateTimeOfAlarm, 7
 					* 24 * 60 * 60 * 1000, pIntent);
+			}else{
+				alarms.set(AlarmManager.RTC_WAKEUP, dateTimeOfAlarm, pIntent);
+			}
 			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -179,11 +184,26 @@ public class Util {
 
 					if (timingData.getType().equals(
 							TaskMongoAlarmReceiver.ACTION_START)) {
+						
+						
+						dbHandler.saveAlarmData(timingData.getTimingsDataId());
+						if(startTimings < System.currentTimeMillis()){
+							Log.e("alarm set 4", "mode: " + timingData.getMode() + " ,, id: " + timingData.getTimingsDataId() + " ,time: "
+									+ timingData.getTimings());
+							dbHandler.saveAlarmData(1234569789);
+							setDateTimeOfAlarm(startTimings, timingData.getMode(),
+									1234569789, context, false);
+							
+							setDateTimeOfAlarm(startTimings + (7 * 24 * 60 * 60 * 1000), timingData.getMode(),
+									timingData.getTimingsDataId(), context, true);
+						}else{
+							setDateTimeOfAlarm(startTimings, timingData.getMode(),
+									timingData.getTimingsDataId(), context, true);
+						}
+						
 						Log.e("alarm set 1", "mode: " + timingData.getMode() + " ,, id: " + timingData.getTimingsDataId() + " ,time: "
 								+ timingData.getTimings());
-						dbHandler.saveAlarmData(timingData.getTimingsDataId());
-						setDateTimeOfAlarm(startTimings, timingData.getMode(),
-								timingData.getTimingsDataId(), context);
+						
 						bookedUntilTime = timingData;
 					} else {
 						Rule selectedRule = null;
@@ -206,14 +226,14 @@ public class Util {
 							dbHandler.saveAlarmData(timingData.getTimingsDataId());
 							setDateTimeOfAlarm(startTimings,
 									TaskMongoAlarmReceiver.NORMAL_MODE,
-									timingData.getTimingsDataId(), context);
+									timingData.getTimingsDataId(), context, true);
 						}else{
 							Log.e("alarm set 3", "mode: " + selectedRule.getMode() + " ,, id: " + timingData.getTimingsDataId() + " ,time: "
 									+ timingData.getTimings());
 							dbHandler.saveAlarmData(timingData.getTimingsDataId());
 							setDateTimeOfAlarm(startTimings,
 									selectedRule.getMode(),
-									timingData.getTimingsDataId(), context);
+									timingData.getTimingsDataId(), context, true);
 						}
 					}
 				}
