@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.daimajia.swipe.adapters.BaseSwipeAdapter;
@@ -31,11 +32,14 @@ public class ListRulesActivity extends Activity {
 	private ListView ruleListView;
 	private SimpleDateFormat initialTimeFormat, desiredTimeFormat;
 	
+	private SettingsDatabaseHandler dbHandler;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_listrules);
+		dbHandler = new SettingsDatabaseHandler(ListRulesActivity.this);
 
 		initialTimeFormat = new SimpleDateFormat("HH:mm");
 		desiredTimeFormat = new SimpleDateFormat("hh:mm a");
@@ -76,9 +80,10 @@ public class ListRulesActivity extends Activity {
 	public class RuleAdapter extends BaseSwipeAdapter {
 		private Context context;
 		private TextView ruleName, ruleTimings, deleteRule, days;
-		private TextView editRule;
+		private TextView editRule, enableRule;
 		private ImageView ruleMode;
-
+		private RelativeLayout transparentLayer;
+		
 		public RuleAdapter(Context ctx) {
 			context = ctx;
 		}
@@ -104,29 +109,41 @@ public class ListRulesActivity extends Activity {
 		@Override
 		public void fillValues(final int position, View convertView) {
 			// TODO Auto-generated method stub
+			
+			final Rule selectedRule = rules.get(position);
+			
 			ruleName = (TextView) convertView.findViewById(R.id.ruleName);
 			ruleMode = (ImageView) convertView.findViewById(R.id.mode);
 			ruleTimings = (TextView) convertView.findViewById(R.id.timings);
 			deleteRule = (TextView) convertView.findViewById(R.id.deleteRule);
 			editRule = (TextView) convertView.findViewById(R.id.editRule);
-			
 			days = (TextView) convertView.findViewById(R.id.days);
-
-			ruleName.setText(rules.get(position).getDescription());
-			if (rules.get(position).getMode()
+			enableRule = (TextView) convertView.findViewById(R.id.enable);
+			transparentLayer = (RelativeLayout) convertView.findViewById(R.id.transparentLayer);
+			
+			if(Boolean.valueOf(selectedRule.getIsEnabled())){
+				enableRule.setText("Disable");
+				transparentLayer.setVisibility(View.GONE);
+			}else{
+				enableRule.setText("Enable");
+				transparentLayer.setVisibility(View.VISIBLE);
+			}
+			
+			ruleName.setText(selectedRule.getDescription());
+			if (selectedRule.getMode()
 					.equals(TaskMongoAlarmReceiver.SILENT_MODE))
 				ruleMode.setBackgroundResource(R.drawable.silent_icon);
-			else if (rules.get(position).getMode()
+			else if (selectedRule.getMode()
 					.equals(TaskMongoAlarmReceiver.NORMAL_MODE))
 				ruleMode.setBackgroundResource(R.drawable.sound_icon);
-			else if (rules.get(position).getMode()
+			else if (selectedRule.getMode()
 					.equals(TaskMongoAlarmReceiver.VIBRATE_MODE))
 				ruleMode.setBackgroundResource(R.drawable.vibrate_icon);
 
 			
 	        Date testStartDate = null;
 	        try {
-	        	testStartDate = initialTimeFormat.parse(rules.get(position).getStartTime());
+	        	testStartDate = initialTimeFormat.parse(selectedRule.getStartTime());
 	        }catch(Exception ex){
 	            ex.printStackTrace();
 	        }
@@ -134,7 +151,7 @@ public class ListRulesActivity extends Activity {
 			
 	        Date testEndDate = null;
 	        try {
-	        	testEndDate = initialTimeFormat.parse(rules.get(position).getEndTime());
+	        	testEndDate = initialTimeFormat.parse(selectedRule.getEndTime());
 	        }catch(Exception ex){
 	            ex.printStackTrace();
 	        }
@@ -142,7 +159,7 @@ public class ListRulesActivity extends Activity {
 	        
 			ruleTimings.setText(startTime + " - " + endTime);
 			
-			days.setText(rules.get(position).getSelectedDays());
+			days.setText(selectedRule.getSelectedDays());
 
 			deleteRule.setOnClickListener(new View.OnClickListener() {
 				@Override
@@ -162,7 +179,7 @@ public class ListRulesActivity extends Activity {
 									// TODO Auto-generated method stub
 									SettingsDatabaseHandler dbHandler = new SettingsDatabaseHandler(
 											ListRulesActivity.this);
-									dbHandler.deleteRule(rules.get(position)
+									dbHandler.deleteRule(selectedRule
 											.getId());
 									Util.refreshAllAlarms(ListRulesActivity.this);
 									
@@ -181,10 +198,28 @@ public class ListRulesActivity extends Activity {
 					Intent mainIntent = new Intent(ListRulesActivity.this,
 							SettingsActivity.class);
 					mainIntent.putExtra("trigger", "edit");
-					mainIntent.putExtra("Rule", rules.get(position));
+					mainIntent.putExtra("Rule", selectedRule);
 					ListRulesActivity.this.startActivity(mainIntent);
 				}
 			});
+			
+			enableRule.setOnClickListener(new View.OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					// TODO Auto-generated method stub
+					if(Boolean.valueOf(selectedRule.getIsEnabled())){
+						selectedRule.setIsEnabled("false");
+					}else{
+						selectedRule.setIsEnabled("true");
+					}
+					notifyDataSetChanged();
+					dbHandler.updateRule(selectedRule);
+					Util.refreshAllAlarms(ListRulesActivity.this);
+					
+				}
+			});
+			
 		}
 
 		@Override

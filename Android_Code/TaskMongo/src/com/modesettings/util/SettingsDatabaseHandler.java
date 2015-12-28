@@ -37,6 +37,7 @@ public class SettingsDatabaseHandler extends SQLiteOpenHelper {
 	private String Description = "Description";
 	private String Id = "Id";
 //	private String Days = "Days";
+	private String isEnabled = "isEnabled";
 	private String Selected_Days = "SelectedDays";
 
 	// field for timings data table
@@ -74,7 +75,7 @@ public class SettingsDatabaseHandler extends SQLiteOpenHelper {
 	public void onCreate(SQLiteDatabase db) {
 		String CREATE_RULES_TABLE = "CREATE TABLE if NOT Exists " + TABLE_RULES
 				+ "(" + Id + " INTEGER PRIMARY KEY AUTOINCREMENT, " + Start_Time + " TEXT," + End_Time + " TEXT,"
-				+  Mode + " TEXT," + Description + " TEXT,"+ Selected_Days+ " TEXT)";
+				+  Mode + " TEXT," + Description + " TEXT,"+ Selected_Days+ " TEXT," + isEnabled +" TEXT)";
 
 		String CREATE_TIMINGS_DATA_TABLE = "CREATE TABLE if NOT Exists " + TABLE_TIMINGS_DATA
 				+ "(" + Timings_Data_Id + " INTEGER PRIMARY KEY AUTOINCREMENT, " + Rule_Id + " INTEGER," + Day + " INTEGER,"
@@ -119,40 +120,38 @@ public class SettingsDatabaseHandler extends SQLiteOpenHelper {
 		db.delete(TABLE_TIMINGS_DATA, Rule_Id +" = ? ", new String[] { String.valueOf(id) });
 	}
 	
-	// edit rule
-	public void updateRule(ArrayList<Rule> rules) {
+	// update/enable/disable rule
+	public void updateRule(Rule rule) {
 		SQLiteDatabase db = this.getWritableDatabase();
-		for (int i = 0; i < rules.size(); i++) {
-			Rule rule = rules.get(i);
-			String selectQuery = "SELECT  * FROM " + TABLE_RULES + " where "
-					+ Id + "=" + rule.getId();
+//			String selectQuery = "SELECT  * FROM " + TABLE_RULES + " where "
+//					+ Id + "=" + rule.getId();
 
 			try {
 				ContentValues values = new ContentValues();
-				values.put(Id, rule.getId());
+				/*values.put(Id, rule.getId());
 				values.put(Start_Time, rule.getStartTime());
 				values.put(End_Time, rule.getEndTime());
 				values.put(Mode, rule.getMode());
 				values.put(Description, rule.getDescription());
-				values.put(Selected_Days, rule.getSelectedDays());
+				values.put(Selected_Days, rule.getSelectedDays());*/
+				values.put(isEnabled, rule.getIsEnabled());
 				
 				
-				cursor = (SQLiteCursor) db.rawQuery(selectQuery, null);
-				if (cursor.moveToFirst()) {
+//				cursor = (SQLiteCursor) db.rawQuery(selectQuery, null);
+//				if (cursor.moveToFirst()) {
 
 					// updating row
 					int a = db.update(TABLE_RULES, values, Id + " = ?",
 							new String[] { String.valueOf(rule.getId()) });
 
-				}
+//				}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-		}
 		db.close();
 	}
 
-	// Save rule
+	// Save/Update rule
 	public int saveRule(Rule rule, int ruleId) {
 		
 		SQLiteDatabase db = this.getWritableDatabase();
@@ -164,12 +163,11 @@ public class SettingsDatabaseHandler extends SQLiteOpenHelper {
 				values.put(Mode, rule.getMode());
 				values.put(Description, rule.getDescription());
 				values.put(Selected_Days, rule.getSelectedDays());
+				values.put(isEnabled, rule.getIsEnabled());
 				
 				if(ruleId!=-1){
-					
 					db.update(TABLE_RULES, values, Id + " = ? ", new String[] { String.valueOf(ruleId)});
 					deleteTimingsData(ruleId, db);
-					
 				}else{
 					// Insert rule
 					ruleId = (int) db.insert(TABLE_RULES, null, values);
@@ -190,13 +188,10 @@ public class SettingsDatabaseHandler extends SQLiteOpenHelper {
 					// Insert rule data
 					int dataId = (int) db.insert(TABLE_TIMINGS_DATA, null, value);
 				}
-				
-				
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		db.close();
-		
 		return ruleId;
 	}
 	
@@ -266,6 +261,7 @@ public class SettingsDatabaseHandler extends SQLiteOpenHelper {
 					rule.setDescription(cursor.getString(cursor
 							.getColumnIndex(Description)));
 					rule.setSelectedDays(cursor.getString(cursor.getColumnIndex(Selected_Days)));
+					rule.setIsEnabled(cursor.getString(cursor.getColumnIndex(isEnabled)));
 					
 
 					String selectRuleDataQuery = "SELECT  * FROM " + TABLE_TIMINGS_DATA+" where "+Rule_Id+" = "+rule.getId();
@@ -326,7 +322,11 @@ public class SettingsDatabaseHandler extends SQLiteOpenHelper {
 		
 		String selectQuery;
 
-		selectQuery = "SELECT  * FROM " + TABLE_TIMINGS_DATA + " where " + Day + " = " + day +" ORDER BY "+Start_Timings+" ASC";
+//		select * from checklists  c left join people p on p.People_id = c.People_ID_CREATE where p.Is_Active=1
+//				 and c.[start_date]='2015-06-18'  order by c.DATE_CREATE
+				 
+		selectQuery = "SELECT  * FROM " + TABLE_TIMINGS_DATA + " t LEFT JOIN "+ TABLE_RULES +" r ON "+ "r."+Id+
+				"="+"t."+Rule_Id+" where r."+isEnabled+"= 'true' AND t." + Day + " = " + day +" ORDER BY t."+Start_Timings+" ASC ";
 
 		SQLiteDatabase db = this.getReadableDatabase();
 
@@ -409,7 +409,7 @@ public class SettingsDatabaseHandler extends SQLiteOpenHelper {
 		
 		String selectQuery;
 
-		selectQuery = "SELECT  * FROM " + TABLE_RULES + " where " + Selected_Days + " LIKE '" +getDay(day) +"%'";
+		selectQuery = "SELECT  * FROM " + TABLE_RULES + " where " + isEnabled + "="+ "'true' AND " + Selected_Days + " LIKE '" +getDay(day) +"%'";
 
 		SQLiteDatabase db = this.getReadableDatabase();
 
@@ -428,7 +428,7 @@ public class SettingsDatabaseHandler extends SQLiteOpenHelper {
 							rule.setDescription(cursor.getString(cursor
 									.getColumnIndex(Description)));
 							rule.setSelectedDays(cursor.getString(cursor.getColumnIndex(Selected_Days)));
-							
+							rule.setIsEnabled(cursor.getString(cursor.getColumnIndex(isEnabled)));
 							
 							ruleList.add(rule);
 						
@@ -517,6 +517,7 @@ public class SettingsDatabaseHandler extends SQLiteOpenHelper {
 					rule.setDescription(cursor.getString(cursor
 							.getColumnIndex(Description)));
 					rule.setSelectedDays(cursor.getString(cursor.getColumnIndex(Selected_Days)));
+					rule.setIsEnabled(cursor.getString(cursor.getColumnIndex(isEnabled)));
 					
 
 					String selectRuleDataQuery = "SELECT  * FROM " + TABLE_TIMINGS_DATA+" where "+Rule_Id+" = "+rule.getId();

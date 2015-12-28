@@ -11,8 +11,19 @@
         <!--What you want to show-->
         <TextView android:layout_width="wrap_content"
             android:layout_height="fill_parent"
-            android:text="Edit"
-            android:background="#00ff00"
+            android:text="Disable"
+            android:background="#000000"
+            android:textColor="#ffffff"
+            android:gravity="center"
+            android:padding="15dp"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:id="@+id/enable"
+            />
+        <TextView android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:text="  Edit  "
+            android:background="@color/blue"
             android:textColor="#ffffff"
             android:gravity="center"
             android:padding="15dp"
@@ -45,7 +56,6 @@
 <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:padding="10dp"
         
         >
        
@@ -53,17 +63,18 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-		        android:layout_alignParentLeft="true"
-		        android:layout_centerInParent="true"
-		        android:layout_toLeftOf="@+id/mode"
+            android:layout_centerInParent="true"
+		    android:padding="10dp"
+		    android:layout_toLeftOf="@+id/mode"
            >
-            <TextView 
-		        android:layout_width="wrap_content"
-		        android:layout_height="wrap_content"
-		        android:id="@+id/ruleName"
-		        android:textStyle="bold"
-		        android:textColor="#000000"
-		        android:textSize="18sp"/>
+
+            <TextView
+                android:id="@+id/ruleName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#000000"
+                android:textSize="18sp"
+                android:textStyle="bold" />
             
              <TextView 
 		        android:layout_width="fill_parent"
@@ -88,7 +99,14 @@
              android:layout_width="wrap_content"
              android:layout_height="wrap_content"
              android:layout_alignParentRight="true"
+             android:layout_marginRight="10dp"
              android:layout_centerVertical="true" />
+         <RelativeLayout android:layout_width="fill_parent"
+             android:layout_height="fill_parent"
+             android:background="@color/black"
+             android:id="@+id/transparentLayer"
+             android:visibility="gone"
+             android:alpha="0.2"></RelativeLayout>
        
 </RelativeLayout>
   </LinearLayout>

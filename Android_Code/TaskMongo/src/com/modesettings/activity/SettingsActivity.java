@@ -312,6 +312,7 @@ public class SettingsActivity extends Activity {
 		Rule rule = new Rule();
 		rule.setDescription(desc.getText().toString().trim());
 		rule.setMode(selectedMode);
+		rule.setIsEnabled("true");
 		String sHour, sMin, eHour, eMin;
 		
 		if(startTimePicker.getCurrentHour()<10)
@@ -341,7 +342,7 @@ public class SettingsActivity extends Activity {
 		
 		ArrayList<TimingsData> timingsData = new ArrayList<TimingsData>();
 		
-		TimingsData startTime, endTime;
+		TimingsData startTime, endTime, tempStartTime, tempEndTime;
 		
 		for(int j = 0; j < days.size(); j++){
 			try{
@@ -349,6 +350,7 @@ public class SettingsActivity extends Activity {
 				int day = days.get(j);
 				
 				startTime = new TimingsData();
+				endTime = new TimingsData();
 				startTime.setTimings(rule.getStartTime());
 				startTime.setMode(rule.getMode());
 				startTime.setRuleId(rule.getId());
@@ -357,15 +359,35 @@ public class SettingsActivity extends Activity {
 				startTime.setEndTimings(rule.getEndTime());
 				
 				if(!isTimeCorrect()){
+
+					startTime.setEndTimings("23:59");
+					tempEndTime = new TimingsData();
+					tempEndTime.setTimings("23:59");
+					tempEndTime.setMode(rule.getMode());
+					tempEndTime.setRuleId(rule.getId());
+					tempEndTime.setType(TaskMongoAlarmReceiver.ACTION_END);
+					tempEndTime.setDay(day);
+					
 					Log.e("time greater than start time", "adding one "+day);
 					if(day == Calendar.SATURDAY)
 						day = Calendar.SUNDAY;
 					else
 						day += 1;
+					
+					tempStartTime = new TimingsData();
+					tempStartTime.setTimings("00:00");
+					tempStartTime.setMode(rule.getMode());
+					tempStartTime.setRuleId(rule.getId());
+					tempStartTime.setDay(day);
+					tempStartTime.setType(TaskMongoAlarmReceiver.ACTION_START);
+					tempStartTime.setEndTimings(rule.getEndTime());
+					
+					timingsData.add(tempEndTime);
+					timingsData.add(tempStartTime);
 				}
 				
 //				Date eDate = formatter.parse(rData.getEndDateTime());
-				endTime = new TimingsData();
+				
 				endTime.setTimings(rule.getEndTime());
 				endTime.setMode(rule.getMode());
 				endTime.setRuleId(rule.getId());

@@ -44,7 +44,7 @@
         android:textStyle="bold"
         android:textSize="14sp"
         android:layout_height="wrap_content"
-        android:text="Swipe left to delete any Rule" />
+        android:text="Swipe left to Edit/Delete or Enable/Disable any Rule" />
     
     <ListView 
         android:layout_width="fill_parent"
