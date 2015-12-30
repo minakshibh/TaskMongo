@@ -513,7 +513,6 @@ public class SettingsActivity extends Activity {
 		for (int i = 0; i < tgWeekDays.length; i++) {
 			if (tgWeekDays[i].isChecked()) {
 					days.add(Integer.parseInt(tgWeekDays[i].getTag().toString()));
-					Log.e("tag added", tgWeekDays[i].getTag().toString());
 			}
 		}
 		

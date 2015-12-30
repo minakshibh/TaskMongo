@@ -170,16 +170,19 @@ public class Util {
 		curTimingsData.setTimingsDataId(-1);
 		
 		for (int i = 0; i < days.size(); i++) {
+			bookedUntilTime = null;
+			
 			ArrayList<Rule> ruleList = dbHandler.getRulesForSpecificDay(days
 					.get(i));
 			ArrayList<TimingsData> timingsDataList = dbHandler
 					.getTimingsDataForSpecificDay(days.get(i));
 
+			// It's today and no rule is there
 			if(days.get(i) == Calendar.getInstance().get(Calendar.DAY_OF_WEEK) && timingsDataList.size() == 0){
 				dbHandler.saveAlarmData(123456);
 				setDateTimeOfAlarm(System.currentTimeMillis(), TaskMongoAlarmReceiver.NORMAL_MODE,
 						123456 , context, false);
-				Log.e("alarm set 5", "mode: NORMAL"  + " ,, id: 123456" );
+				Log.e("It's today, no rule is available so setting normal mode", "mode: NORMAL"  + " ,, id: 123456" );
 			}else{
 			
 			for (int j = 0; j < timingsDataList.size(); j++) {
@@ -208,8 +211,8 @@ public class Util {
 										timingData.getTimingsDataId() + TaskMongoAlarmReceiver.timeLapse, context, false);*/
 								if(curTimingsData.getTimingsDataId()==-1 || (curTimingsData.getTimingsDataId()!=-1 && getPriority(curTimingsData.getMode())< getPriority(timingData.getMode())))
 								{
-								curTimingsData.setTimingsDataId(timingData.getTimingsDataId() + TaskMongoAlarmReceiver.timeLapse);
-								curTimingsData.setMode(timingData.getMode());
+									curTimingsData.setTimingsDataId(timingData.getTimingsDataId() + TaskMongoAlarmReceiver.timeLapse);
+									curTimingsData.setMode(timingData.getMode());
 								}
 							}
 							Log.e("shifted time", "one week forward");
@@ -218,7 +221,7 @@ public class Util {
 						setDateTimeOfAlarm(startTimings, timingData.getMode(),
 									timingData.getTimingsDataId(), context, true);
 						
-						Log.e("alarm set 1", "mode: " + timingData.getMode() + " ,, id: " + timingData.getTimingsDataId() + " ,time: "
+						Log.e("Alarm type: START", "mode: " + timingData.getMode() + " ,, id: " + timingData.getTimingsDataId() + " ,time: "
 								+ timingData.getTimings());
 						
 						bookedUntilTime = timingData;
@@ -230,9 +233,9 @@ public class Util {
 									rule.getStartTime()) >= 0
 									&& timingData.getTimings().compareTo(
 											rule.getEndTime()) < 0) {
-								if (null == selectedRule
-										|| getPriority(rule.getMode()) > getPriority(selectedRule
-												.getMode())) {
+								if (null == selectedRule) {
+									selectedRule = rule;
+								}else if(getPriority(rule.getMode()) > getPriority(selectedRule.getMode())){
 									selectedRule = rule;
 								}
 							}
@@ -242,7 +245,7 @@ public class Util {
 							
 							if(startTimings < curTime){
 								if(j==timingsDataList.size()-1){
-									Log.e("alarm set 4", "mode: " +  TaskMongoAlarmReceiver.NORMAL_MODE + " ,, id: " + timingData.getTimingsDataId() + " ,time: "
+									Log.e("Alarm type: END, no further rule found and end time has already passed away", "mode: " +  TaskMongoAlarmReceiver.NORMAL_MODE + " ,, id: " + timingData.getTimingsDataId() + " ,time: "
 											+ timingData.getTimings());
 									dbHandler.saveAlarmData(timingData.getTimingsDataId() + TaskMongoAlarmReceiver.timeLapse);
 									
@@ -255,7 +258,7 @@ public class Util {
 							setDateTimeOfAlarm(startTimings,
 									TaskMongoAlarmReceiver.NORMAL_MODE,
 									timingData.getTimingsDataId(), context, true);
-							Log.e("alarm set 2", "mode: " + TaskMongoAlarmReceiver.NORMAL_MODE + " ,, id: " + timingData.getTimingsDataId() + " ,time: "
+							Log.e("Alarm type: END, no further rule found", "mode: " + TaskMongoAlarmReceiver.NORMAL_MODE + " ,, id: " + timingData.getTimingsDataId() + " ,time: "
 									+ timingData.getTimings());
 							
 						}else{
@@ -263,7 +266,7 @@ public class Util {
 							
 							if(startTimings < curTime){
 								if(timingData.getTimeInMillis(selectedRule.getEndTime()) > curTime){
-									Log.e("alarm set 4", "mode: " + selectedRule.getMode() + " ,, id: " + timingData.getTimingsDataId() + " ,time: "
+									Log.e("Alarm type: END, rule found but starttime has already passed away", "mode: " + selectedRule.getMode() + " ,, id: " + timingData.getTimingsDataId() + " ,time: "
 											+ timingData.getTimings());
 									dbHandler.saveAlarmData(timingData.getTimingsDataId() + TaskMongoAlarmReceiver.timeLapse);
 									
@@ -276,9 +279,11 @@ public class Util {
 							setDateTimeOfAlarm(startTimings,
 									selectedRule.getMode(),
 									timingData.getTimingsDataId(), context, true);
-							Log.e("alarm set 3", "mode: " + selectedRule.getMode() + " ,, id: " + timingData.getTimingsDataId() + " ,time: "
+							Log.e("Alarm type: END, rule found, activalting selected rule", "mode: " + selectedRule.getMode() + " ,, id: " + timingData.getTimingsDataId() + " ,time: "
 									+ timingData.getTimings());
-							
+							bookedUntilTime.setMode(selectedRule.getMode());
+							bookedUntilTime.setTimings(selectedRule.getStartTime());
+							bookedUntilTime.setEndTimings(selectedRule.getEndTime());
 						}
 					}
 				}
@@ -286,11 +291,12 @@ public class Util {
 			}
 		}
 
-		ArrayList<Integer> alarmdata = dbHandler.getAlarmData();
+		/*ArrayList<Integer> alarmdata = dbHandler.getAlarmData();
+		
 		
 		for(int i = 0; i < alarmdata.size(); i++){
 			Log.e("alarm Id : ", ""+ alarmdata.get(i));
-		}
+		}*/
 		
 		if(curTimingsData.getTimingsDataId()!=-1){
 //			Log.e("alarm set 4", "mode: " + timingData.getMode() + " ,, id: " + timingData.getTimingsDataId() + " ,time: "

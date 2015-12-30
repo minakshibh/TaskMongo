@@ -409,7 +409,7 @@ public class SettingsDatabaseHandler extends SQLiteOpenHelper {
 		
 		String selectQuery;
 
-		selectQuery = "SELECT  * FROM " + TABLE_RULES + " where " + isEnabled + "="+ "'true' AND " + Selected_Days + " LIKE '" +getDay(day) +"%'";
+		selectQuery = "SELECT  * FROM " + TABLE_RULES + " where " + isEnabled + "="+ "'true' AND " + Selected_Days + " LIKE '%" +getDay(day) +"%'";
 
 		SQLiteDatabase db = this.getReadableDatabase();
 
