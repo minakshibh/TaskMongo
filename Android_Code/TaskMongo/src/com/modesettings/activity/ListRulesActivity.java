@@ -20,6 +20,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.daimajia.swipe.adapters.BaseSwipeAdapter;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 import com.modesettings.model.Rule;
 import com.modesettings.util.SettingsDatabaseHandler;
 import com.modesettings.util.TaskMongoAlarmReceiver;
@@ -48,6 +50,10 @@ public class ListRulesActivity extends Activity {
 		ruleListView = (ListView) findViewById(R.id.listRoles);
 
 		addRule.setOnClickListener(clickListener);
+		
+		AdView mAdView = (AdView) findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().addTestDevice("5560E5DC05DF22FB254226E6DDFEE790").build();
+        mAdView.loadAd(adRequest);
 	}
 
 	@Override

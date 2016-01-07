@@ -21,6 +21,8 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.ToggleButton;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 import com.modesettings.model.Rule;
 import com.modesettings.model.TimingsData;
 import com.modesettings.util.SettingsDatabaseHandler;
@@ -142,6 +144,11 @@ public class SettingsActivity extends Activity {
 			private Rule rule;*/
 		}
 		initDays(trigger);
+		
+		AdView mAdView = (AdView) findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().addTestDevice("5560E5DC05DF22FB254226E6DDFEE790").build();
+        mAdView.loadAd(adRequest);
+        
 	}
 
 	private void initDays(String trigger) {
