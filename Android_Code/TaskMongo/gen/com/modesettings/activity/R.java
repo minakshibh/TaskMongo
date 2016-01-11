@@ -1914,7 +1914,6 @@ containing a value of this type.
          */
         public static final int auth_google_play_services_client_google_display_name=0x7f070006;
         public static final int banner_ad_unit_id=0x7f07003b;
-        public static final int banner_ad_unit_id_2=0x7f07003c;
         /**  Message of the notification to indicate an active cast display connection.  [CHAR LIMIT=80] NOTE: Same text as msgid="794424023757290105" 
          */
         public static final int cast_notification_connected_message=0x7f070025;
