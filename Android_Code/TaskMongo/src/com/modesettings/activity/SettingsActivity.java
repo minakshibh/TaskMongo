@@ -146,7 +146,8 @@ public class SettingsActivity extends Activity {
 		initDays(trigger);
 		
 		AdView mAdView = (AdView) findViewById(R.id.adView);
-        AdRequest adRequest = new AdRequest.Builder().addTestDevice("5560E5DC05DF22FB254226E6DDFEE790").build();
+//        AdRequest adRequest = new AdRequest.Builder().addTestDevice("5560E5DC05DF22FB254226E6DDFEE790").build();
+        AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
         
 	}
@@ -246,7 +247,23 @@ public class SettingsActivity extends Activity {
 					alert.show();
 
 				} else {
-					 saveRule();
+					if(!isTimeCorrect()){
+						AlertDialog.Builder warning = new AlertDialog.Builder(SettingsActivity.this);
+						warning.setTitle("WARNING! The end time is less than the start time!");
+						warning.setMessage("Rule will end on next day. Do you wish to continue?");
+						warning.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+							
+							@Override
+							public void onClick(DialogInterface dialog, int which) {
+								// TODO Auto-generated method stub
+								saveRule();
+							}
+						});
+						warning.setNegativeButton("No", null);
+						warning.show();
+					}else{
+						saveRule();
+					}
 				}
 			}
 		}
@@ -316,6 +333,7 @@ public class SettingsActivity extends Activity {
     }
     
 	private void saveRule(){
+
 		Rule rule = new Rule();
 		rule.setDescription(desc.getText().toString().trim());
 		rule.setMode(selectedMode);
