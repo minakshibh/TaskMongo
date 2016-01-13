@@ -17,6 +17,8 @@ import com.modesettings.model.TimingsData;
 
 public class Util {
 
+	public static final String APP_PREFERENCE = "TaskMongoPreferences";
+	public static final String IS_ICON_CREATED = "IsIconCreated";
 	private static Context context;
 	public static long milliSecondsForWeek = 7 * 24 * 60 * 60 * 1000;
 		

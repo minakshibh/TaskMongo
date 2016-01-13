@@ -55,8 +55,35 @@ public class ListRulesActivity extends Activity {
 //        AdRequest adRequest = new AdRequest.Builder().addTestDevice("5560E5DC05DF22FB254226E6DDFEE790").build();
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
+        
+        if(!getSharedPreferences(Util.APP_PREFERENCE, Activity.MODE_PRIVATE).getBoolean(Util.IS_ICON_CREATED, false)){
+            addShortcut();
+            getSharedPreferences(Util.APP_PREFERENCE, Activity.MODE_PRIVATE).edit().putBoolean(Util.IS_ICON_CREATED, true).commit();
+        }
+        
 	}
 
+	private void addShortcut() {
+	    //Adding shortcut for MainActivity 
+	    //on Home screen
+	    Intent shortcutIntent = new Intent(getApplicationContext(),
+	            SplashActivity.class);
+
+	    shortcutIntent.setAction(Intent.ACTION_MAIN);
+
+	    Intent addIntent = new Intent();
+	    addIntent
+	            .putExtra(Intent.EXTRA_SHORTCUT_INTENT, shortcutIntent);
+	    addIntent.putExtra(Intent.EXTRA_SHORTCUT_NAME, getResources().getString(R.string.app_name));
+	    addIntent.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE,
+	            Intent.ShortcutIconResource.fromContext(getApplicationContext(),
+	                    R.drawable.app_icon));
+
+	    addIntent
+	            .setAction("com.android.launcher.action.INSTALL_SHORTCUT");
+	    getApplicationContext().sendBroadcast(addIntent);
+	}
+	
 	@Override
 	protected void onResume() {
 		// TODO Auto-generated method stub
@@ -174,7 +201,7 @@ public class ListRulesActivity extends Activity {
 					// TODO Auto-generated method stub
 					AlertDialog.Builder alert = new AlertDialog.Builder(
 							ListRulesActivity.this);
-					alert.setTitle("Delete this rule?");
+					alert.setTitle("Delete this mongo?");
 					alert.setMessage("Are you sure?");
 					alert.setPositiveButton("No", null);
 					alert.setNegativeButton("Yes",

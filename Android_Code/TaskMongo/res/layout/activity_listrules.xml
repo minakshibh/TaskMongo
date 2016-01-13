@@ -16,7 +16,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="Rules"
+            android:text="Mongos"
             android:textColor="@color/white"
             android:textSize="20sp"
             android:textStyle="bold" />
@@ -29,7 +29,7 @@
             android:layout_centerInParent="true"
             android:drawablePadding="5dp"
             android:gravity="center"
-            android:text="Add Rule"
+            android:text="Add Mongo"
             android:padding="10dp"
             android:textColor="@color/blue"
             android:textSize="16sp"
@@ -46,7 +46,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/txtinfo"
         android:layout_below="@+id/headerLayout"
-        android:text="Swipe left to Edit/Delete or Enable/Disable any Rule" />
+        android:text="Swipe left to Edit/Delete or Enable/Disable any Mongo" />
     
     <ListView 
         android:layout_width="fill_parent"

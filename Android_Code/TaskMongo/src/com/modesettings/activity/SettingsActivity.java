@@ -207,7 +207,7 @@ public class SettingsActivity extends Activity {
 			if (v == cancel) {
 				AlertDialog.Builder alert = new AlertDialog.Builder(
 						SettingsActivity.this);
-				alert.setTitle("Cancel the Rule?");
+				alert.setTitle("Unsaved changes will be lost.");
 				alert.setMessage("Are you sure?");
 				alert.setPositiveButton("No", null);
 				alert.setNegativeButton("Yes",
@@ -235,7 +235,7 @@ public class SettingsActivity extends Activity {
 						/*|| (!isTimeCorrect() && !hasConsecutiveDays())*/) {
 
 					if (desc.getText().toString().trim().equals(""))
-						alert.setMessage("Please enter description of Rule.");
+						alert.setMessage("Please enter description of Mongo.");
 					else if (days.size()==0)
 						alert.setMessage("Please select atleast one day.");
 					else if (selectedMode.equals(""))
@@ -250,7 +250,7 @@ public class SettingsActivity extends Activity {
 					if(!isTimeCorrect()){
 						AlertDialog.Builder warning = new AlertDialog.Builder(SettingsActivity.this);
 						warning.setTitle("WARNING! The end time is less than the start time!");
-						warning.setMessage("Rule will end on next day. Do you wish to continue?");
+						warning.setMessage("Mongo will end on next day. Do you wish to continue?");
 						warning.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 							
 							@Override
@@ -479,7 +479,7 @@ public class SettingsActivity extends Activity {
 			
 			AlertDialog.Builder alert = new AlertDialog.Builder(SettingsActivity.this);
 			alert.setTitle("Congratulations!!!");
-			alert.setMessage("Rule saved successfully");
+			alert.setMessage("Mongo saved successfully");
 			alert.setPositiveButton("Okay", new DialogInterface.OnClickListener() {
 				
 				@Override

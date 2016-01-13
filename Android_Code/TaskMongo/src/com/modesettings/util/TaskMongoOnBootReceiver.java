@@ -17,7 +17,7 @@ public class TaskMongoOnBootReceiver extends BroadcastReceiver{
     public void onReceive(Context context, Intent intent) {
     	
     	try{
-    		Toast.makeText(context, "Starting TaskMongo Rules...", Toast.LENGTH_LONG).show();
+    		Toast.makeText(context, "Starting Mongos...", Toast.LENGTH_LONG).show();
     	Util.refreshAllAlarms(context);
     	}catch(Exception e){
     		AlertDialog.Builder alert = new AlertDialog.Builder(context);
