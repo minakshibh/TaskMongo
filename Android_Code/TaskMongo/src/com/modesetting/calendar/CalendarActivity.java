@@ -57,17 +57,11 @@ public class CalendarActivity extends Activity {
 
 	public void customDailog(String str) {
 		final Dialog dialog = new Dialog(CalendarActivity.this);
-
-		// setting custom layout to dialog
 		dialog.setContentView(R.layout.custom_dialog);
 		dialog.setCancelable(false);
 		dialog.setTitle("Task Mongo");
-
-		// adding text dynamically
 		TextView txt = (TextView) dialog.findViewById(R.id.txt_dia);
 		txt.setText(str);
-
-		// adding button click event
 		Button btn_no = (Button) dialog.findViewById(R.id.btn_no);
 		btn_no.setOnClickListener(new View.OnClickListener() {
 			@Override
@@ -82,35 +76,15 @@ public class CalendarActivity extends Activity {
 			public void onClick(View v) {
 				dialog.dismiss();
 				try {
-
-					// long id=GetMaxID();
-
 					fetchEventData(getId);
-					// System.err.println("ID="+getId);
+					
 				} catch (Exception e) {
-					// customDailog(e.getMessage());
+					
 				}
 			}
 		});
 		dialog.show();
 	}
-
-	/*
-	 * private boolean mayRequestContacts() { if (Build.VERSION.SDK_INT <
-	 * Build.VERSION_CODES.LOLLIPOP_MR1) { return true; } if
-	 * (checkSelfPermission(READ_CONTACTS) == PackageManager.PERMISSION_GRANTED)
-	 * { return true; } if (shouldShowRequestPermissionRationale(READ_CONTACTS))
-	 * { Snackbar.make(mEmailView, R.string.permission_rationale,
-	 * Snackbar.LENGTH_INDEFINITE) .setAction(android.R.string.ok, new
-	 * View.OnClickListener() {
-	 * 
-	 * @Override
-	 * 
-	 * @TargetApi(Build.VERSION_CODES.LOLLIPOP_MR1) public void onClick(View v)
-	 * { requestPermissions(new String[]{READ_CONTACTS}, REQUEST_READ_CONTACTS);
-	 * } }); } else { requestPermissions(new String[]{READ},
-	 * REQUEST_READ_CONTACTS); } return false; }
-	 */
 
 	public long GetMaxID() {
 		ContentResolver cr = getContentResolver();
