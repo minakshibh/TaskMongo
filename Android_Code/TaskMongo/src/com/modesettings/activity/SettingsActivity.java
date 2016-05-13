@@ -9,6 +9,7 @@ import java.util.TimeZone;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -104,6 +105,7 @@ public class SettingsActivity extends Activity {
 		
 		
 		trigger = getIntent().getStringExtra("trigger");
+	
 		if(trigger.equals("edit")){
 						
 			rule = getIntent().getParcelableExtra("Rule");
@@ -143,6 +145,29 @@ public class SettingsActivity extends Activity {
 			private String trigger;
 			private Rule rule;*/
 		}
+		else if(trigger.equalsIgnoreCase("calendar"))
+		{
+			desc.setText(getIntent().getStringExtra("title"));
+			
+			String getStartTime=getIntent().getStringExtra("start");
+			String[] startTime = getStartTime.split(":");
+			startTimePicker.setCurrentHour(Integer.parseInt(startTime[0]));
+			startTimePicker.setCurrentMinute(Integer.parseInt(startTime[1]));
+			
+			String getEndTime=getIntent().getStringExtra("end");
+			String[] endTime = getEndTime.split(":");
+			endTimePicker.setCurrentHour(Integer.parseInt(endTime[0]));
+			endTimePicker.setCurrentMinute(Integer.parseInt(endTime[1]));
+			
+			
+			String[] selection = getIntent().getStringExtra("startDay").split(", ");
+			
+			for(int i = 0; i<selection.length; i++){
+				days.add(getDayIndex(selection[i]));
+			}
+			
+			}
+				
 		initDays(trigger);
 		
 		AdView mAdView = (AdView) findViewById(R.id.adView);
@@ -161,7 +186,16 @@ public class SettingsActivity extends Activity {
 				else
 					tgWeekDays[i].setChecked(false);
 			}
-		}else{
+		}
+		else if(trigger.equalsIgnoreCase("calendar")){
+			for(int i = 0; i < tgWeekDays.length; i++){
+				if(days.contains(tgWeekDays[i].getTag()))
+					tgWeekDays[i].setChecked(true);
+				else
+					tgWeekDays[i].setChecked(false);
+			}
+		}
+		else{
 			int curDay = calendar.get(Calendar.DAY_OF_WEEK);
 			
 			for(int i = 0; i < tgWeekDays.length; i++){
@@ -222,7 +256,16 @@ public class SettingsActivity extends Activity {
 						});
 				alert.show();
 			} else if (v == back) {
+				if(trigger.equalsIgnoreCase("calendar"))
+				{
+				Intent intent = new Intent(SettingsActivity.this,ListRulesActivity.class);
+				startActivity(intent);
 				finish();
+				}
+				else
+				{
+					finish();
+						}
 			} else if (v == save) {
 				selectedMode = getSelectedMode();
 				days = getSelectedDays();

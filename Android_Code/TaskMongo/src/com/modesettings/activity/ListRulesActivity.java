@@ -103,8 +103,7 @@ public class ListRulesActivity extends Activity {
 		public void onClick(View v) {
 			// TODO Auto-generated method stub
 			if (v == addRule) {
-				Intent intent = new Intent(ListRulesActivity.this,
-						SettingsActivity.class);
+				Intent intent = new Intent(ListRulesActivity.this,SettingsActivity.class);
 				intent.putExtra("trigger", "new");
 				startActivity(intent);
 			} 
