@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.daimajia.swipe.SwipeLayout xmlns:android="http://schemas.android.com/apk/res/android" android:id="@+id/swipe"
+    android:layout_width="fill_parent" android:layout_height="wrap_content">
+    <!-- Bottom View Start-->
+     <LinearLayout
+        android:background="#ffffff"
+        android:id="@+id/bottom_wrapper"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+        <!--What you want to show-->
+        <!-- <TextView android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:text="Disable"
+            android:background="#000000"
+            android:textColor="#ffffff"
+            android:gravity="center"
+            android:padding="15dp"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:id="@+id/enable"
+            /> -->
+        <TextView android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:text="  Edit  "
+            android:background="@color/blue"
+            android:textColor="#ffffff"
+            android:gravity="center"
+            android:padding="15dp"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:id="@+id/editRule"
+            /> 
+        <TextView android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:text=" Delete "
+            android:background="#ff0000"
+            android:textColor="#ffffff"
+            android:gravity="center"
+            android:padding="15dp"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:id="@+id/deleteRule"
+            />
+
+    </LinearLayout>
+    <!-- Bottom View End-->
+
+<!-- Surface View Start -->
+     <LinearLayout
+        android:background="#ffffff"
+        android:layout_width="match_parent"
+        android:id="@+id/swipeLayout"
+        android:layout_height="match_parent">
+        <!--What you want to show in SurfaceView-->
+<RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        
+        >
+       
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_centerInParent="true"
+		    android:padding="10dp"
+		    android:layout_toLeftOf="@+id/mode"
+           >
+
+            <TextView
+                android:id="@+id/ruleName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#000000"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+            
+             <TextView 
+		        android:layout_width="fill_parent"
+		        android:layout_height="wrap_content"
+		        android:layout_marginTop="3dp"
+		        android:id="@+id/timings"
+		        android:textColor="@android:color/darker_gray"
+		        android:textSize="16sp"/>
+             <TextView 
+		        android:layout_width="fill_parent"
+		        android:layout_height="wrap_content"
+		        android:layout_marginTop="3dp"
+		        android:id="@+id/days"
+		        android:textColor="@android:color/darker_gray"
+		        android:maxLines="2"
+		        android:minLines="1"
+		        android:textSize="14sp"/>
+       </LinearLayout>
+
+         <ImageView
+             android:id="@+id/mode"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:layout_alignParentRight="true"
+             android:layout_marginRight="10dp"
+             android:layout_centerVertical="true" />
+         <RelativeLayout android:layout_width="fill_parent"
+             android:layout_height="fill_parent"
+             android:background="@android:color/black"
+             android:id="@+id/transparentLayer"
+             android:visibility="gone"
+             android:alpha="0.2"></RelativeLayout>
+       
+</RelativeLayout>
+  </LinearLayout>
+    <!-- Surface View End -->
+</com.daimajia.swipe.SwipeLayout>

@@ -55,6 +55,7 @@ public class SettingsActivity extends Activity {
 		setContentView(R.layout.activity_settings);
 		days = new ArrayList<Integer>();
 		
+	
 		/*IntentFilter filter = new IntentFilter(TaskMongoAlarmReceiver.ACTION_ALARM);
 		BroadcastReceiver mReceiver = new TaskMongoAlarmReceiver();
 		registerReceiver(mReceiver, filter);*/

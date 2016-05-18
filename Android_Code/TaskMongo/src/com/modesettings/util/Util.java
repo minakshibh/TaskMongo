@@ -8,8 +8,10 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.sax.EndTextElementListener;
 import android.util.Log;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.modesettings.model.Rule;
@@ -390,5 +392,13 @@ public class Util {
 		
 		Toast.makeText(context, message, Toast.LENGTH_LONG).show();
 	}
+
+	 public static void fontAwesomeApply(Context act,TextView...params)
+	    {
+	        Typeface typeFace_icon= Typeface.createFromAsset(act.getAssets(), "fontawesome-webfont.ttf");
+	        for (TextView tv : params) {
+	            tv.setTypeface(typeFace_icon);
+	        }
+	    }
 
 }

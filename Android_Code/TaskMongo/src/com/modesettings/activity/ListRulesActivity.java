@@ -3,25 +3,32 @@ package com.modesettings.activity;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
+import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v4.widget.DrawerLayout;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.animation.AlphaAnimation;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import com.daimajia.swipe.adapters.BaseSwipeAdapter;
 import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
+import com.modesetting.gps.BackgroundLocationService;
+import com.modesetting.gps.ListLocationActivity;
 import com.modesettings.model.Rule;
 import com.modesettings.util.SettingsDatabaseHandler;
 import com.modesettings.util.TaskMongoAlarmReceiver;
@@ -36,22 +43,44 @@ public class ListRulesActivity extends Activity {
 	
 	private SettingsDatabaseHandler dbHandler;
 	
+	
+	public ActionBarDrawerToggle mDrawerToggle;
+	public DrawerLayout mDrawerLayout;
+	public RelativeLayout flyoutDrawerRl;
+	public AlphaAnimation buttonClick = new AlphaAnimation(1F, 0.2F);
+	TextView slider,sliderMenu;
+	TextView Mainmenu;
+	private LinearLayout lay_mylocation,lay_addLocation;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_listrules);
+		
+		//satrt services
+		startService(new Intent(ListRulesActivity.this,BackgroundLocationService.class));
 		dbHandler = new SettingsDatabaseHandler(ListRulesActivity.this);
 
 		initialTimeFormat = new SimpleDateFormat("HH:mm");
 		desiredTimeFormat = new SimpleDateFormat("hh:mm a");
 		
+		
+		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+		mDrawerLayout.setScrimColor(getResources().getColor(android.R.color.transparent));
+		flyoutDrawerRl = (RelativeLayout) findViewById(R.id.left_drawer);
+		lay_mylocation=(LinearLayout)findViewById(R.id.lay_mylocation);
+		lay_addLocation=(LinearLayout)findViewById(R.id.lay_addLocation);
+		drawble();
+		
 		addRule = (TextView) findViewById(R.id.btnAdd);
+		addRule.setVisibility(View.GONE);
 		ruleListView = (ListView) findViewById(R.id.listRoles);
-
 		addRule.setOnClickListener(clickListener);
 		
 		AdView mAdView = (AdView) findViewById(R.id.adView);
+		//mAdView.setAdSize(AdSize.BANNER);
+		//mAdView.setAdUnitId("ca-app-pub-9728988682571889/1911358451");
 //        AdRequest adRequest = new AdRequest.Builder().addTestDevice("5560E5DC05DF22FB254226E6DDFEE790").build();
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
@@ -62,6 +91,74 @@ public class ListRulesActivity extends Activity {
         }
         
 	}
+private void drawble()
+{
+	Mainmenu=(TextView)findViewById(R.id.Mainmenu);
+	Util.fontAwesomeApply(this, Mainmenu);
+	Mainmenu.setOnClickListener(DrawerListener);
+	sliderOnClickListener();
+	setListenerOnDrawer();
+	sliderMenu=(TextView)findViewById(R.id.Slidermenu);
+	sliderMenu.setOnClickListener(new View.OnClickListener() {
+
+		@Override
+		public void onClick(View v) {
+			// TODO Auto-generated method stub
+			if (mDrawerLayout.isDrawerOpen(flyoutDrawerRl)) {
+				mDrawerLayout.closeDrawers();
+			}
+		}
+	});
+	}
+public void sliderOnClickListener() {
+
+	lay_addLocation.setOnClickListener(clickListener);
+	lay_mylocation.setOnClickListener(clickListener);
+	
+
+}
+private void DrawerLayoutClose()
+{
+	//if (mDrawerLayout.isDrawerOpen(flyoutDrawerRl)) {
+		mDrawerLayout.closeDrawers();
+	//}
+}
+
+public View.OnClickListener DrawerListener = new View.OnClickListener() {
+
+	@Override
+	public void onClick(View v) {
+		// TODO Auto-generated method stub
+
+		if (mDrawerLayout.isDrawerOpen(flyoutDrawerRl)) {
+			mDrawerLayout.closeDrawers();
+		} else {
+			mDrawerLayout.openDrawer(flyoutDrawerRl);
+		}
+	}
+};
+
+private void setListenerOnDrawer() {
+	mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
+			R.drawable.ic_launcher, R.string.app_name, R.string.app_name) {
+		/** Called when a drawer has settled in a completely closed state. */
+		public void onDrawerClosed(View view) {
+			super.onDrawerClosed(view);
+		}
+
+		/** Called when a drawer has settled in a completely open state. */
+		public void onDrawerOpened(View drawerView) {
+			super.onDrawerOpened(drawerView);
+		}
+	};
+	// mDrawerLayout.setDrawerListener(mDrawerToggle);
+}
+
+
+
+
+
+
 
 	private void addShortcut() {
 	    //Adding shortcut for MainActivity 
@@ -106,6 +203,20 @@ public class ListRulesActivity extends Activity {
 				Intent intent = new Intent(ListRulesActivity.this,SettingsActivity.class);
 				intent.putExtra("trigger", "new");
 				startActivity(intent);
+				DrawerLayoutClose();
+			} 
+			else if (v == lay_addLocation) {
+				Intent intent = new Intent(ListRulesActivity.this,SettingsActivity.class);
+				intent.putExtra("trigger", "new");
+				startActivity(intent);
+				DrawerLayoutClose();
+				
+			} 
+			else if (v == lay_mylocation) {
+				Intent intent = new Intent(ListRulesActivity.this,ListLocationActivity.class);
+				//mIntent.putExtra("locationName", value);
+			    startActivity(intent);
+				DrawerLayoutClose();
 			} 
 		}
 	};

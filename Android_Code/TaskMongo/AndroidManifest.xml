@@ -16,6 +16,10 @@
     <uses-permission android:name="android.permission.WAKE_LOCK" />
 	<uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT" />
 	<uses-permission android:name="android.permission.GET_ACCOUNTS"/>
+
+   <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+  <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+ <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES"/>
     <application
         android:allowBackup="true"
         android:icon="@drawable/app_icon"
@@ -37,6 +41,7 @@
         </activity>
         <activity
             android:name="com.modesettings.activity.SettingsActivity"
+            android:windowSoftInputMode="stateHidden"
             android:screenOrientation="portrait" >
         </activity>
  
@@ -45,9 +50,33 @@
              android:theme="@style/Theme.AppCompat.Translucent"
             android:screenOrientation="portrait" >
         </activity>
+        
+            <activity
+            android:name="com.modesetting.gps.AddLocationActivity"
+            android:screenOrientation="portrait"
+          />
+             <activity
+            android:name="com.modesetting.gps.ListLocationActivity"
+            android:screenOrientation="portrait"
+          />
         <activity
         android:name="com.google.android.gms.ads.AdActivity"
         android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"/>
+        
+        
+        
+  
+   <!--   for map -->
+    <meta-data android:name="com.google.android.gms.version" android:value="@integer/google_play_services_version" />
+         <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyCIe1yvdSMvcA9zoeh3igDf53g4PMAkL9o" />
+        
+        
+        
+        
+        
+        <!-- reboot  Receiver -->
         
         <receiver android:name="com.modesettings.util.TaskMongoOnBootReceiver" >
          <intent-filter>
@@ -58,6 +87,7 @@
         <receiver android:name="com.modesettings.util.TaskMongoAlarmReceiver" >
         </receiver>
 
+        
      <!-- for calendar -->
         <receiver 
             android:name="com.modesetting.calendar.CalendarChangedReceiver">
@@ -73,7 +103,10 @@
         
         <service android:name="com.modesettings.util.ChangeAlarmModeService" >
         </service>
-        
+        <!-- location service -->
+         <service android:name="com.modesetting.gps.BackgroundLocationService" />  
+         
+         
        <meta-data android:name="com.google.android.gms.version" android:value="@integer/google_play_services_version" />
         
     </application>
