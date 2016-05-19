@@ -1,100 +1,94 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<android.support.v4.widget.DrawerLayout 
- 
-    xmlns:android="http://schemas.android.com/apk/res/android"
-      xmlns:ads="http://schemas.android.com/apk/res-auto"
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ads="http://schemas.android.com/apk/res-auto"
     android:id="@+id/drawer_layout"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent" >
-    
-<RelativeLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/off_white">
 
     <RelativeLayout
-        android:id="@+id/headerLayout"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/black">
- 
- 
-  <TextView
-      	 android:layout_alignParentLeft="true"
-        android:id="@+id/Mainmenu"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-      
-        android:padding="5dp"
-        android:text="@string/menu_button"
-    
-     />
- 		
-        
-        <TextView
-            android:layout_width="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/off_white" >
+
+        <RelativeLayout
+            android:id="@+id/headerLayout"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            
-            android:text="Mongos"
-            android:textColor="@color/white"
-            android:textSize="20sp"
-            android:textStyle="bold" />
+            android:background="@color/black" >
+
+            <TextView
+                android:id="@+id/Mainmenu"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="10dp"
+                android:text="@string/menu_button"
+                android:layout_centerInParent="true"
+                android:textColor="@color/white"
+                android:textSize="20sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="Mongos"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                 android:padding="10dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/btnAdd"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerInParent="true"
+                android:drawablePadding="5dp"
+                android:gravity="center"
+                android:padding="10dp"
+                android:text="Add Mongo"
+                android:visibility="gone"
+                android:textColor="@color/blue"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+        </RelativeLayout>
 
         <TextView
-            android:id="@+id/btnAdd"
+            android:id="@+id/txtinfo"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/headerLayout"
+            android:background="@color/light_grey"
+            android:padding="5dp"
+            android:text="Swipe left to Edit/Delete or Enable/Disable any Mongo"
+            android:textColor="@color/light_black"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
+        <ListView
+            android:id="@+id/listRoles"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_above="@+id/adView"
+            android:layout_below="@+id/txtinfo" >
+        </ListView>
+
+        <com.google.android.gms.ads.AdView
+            android:id="@+id/adView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerInParent="true"
-            android:drawablePadding="5dp"
-            android:gravity="center"
-            android:text="Add Mongo"
-            android:padding="10dp"
-            android:textColor="@color/blue"
-            android:textSize="16sp"
-            android:textStyle="bold" />
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            ads:adSize="BANNER"
+            ads:adUnitId="@string/banner_ad_unit_id" />
     </RelativeLayout>
-
-    <TextView
-        android:layout_width="fill_parent"
-        android:background="@color/light_grey"
-        android:padding="5dp"
-        android:textColor="@color/light_black"
-        android:textStyle="bold"
-        android:textSize="14sp"
-        android:layout_height="wrap_content"
-        android:id="@+id/txtinfo"
-        android:layout_below="@+id/headerLayout"
-        android:text="Swipe left to Edit/Delete or Enable/Disable any Mongo" />
-    
-    <ListView 
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_below="@+id/txtinfo"
-        android:layout_above="@+id/adView"
-        android:id="@+id/listRoles"
-        ></ListView>
-    
-    
-    <com.google.android.gms.ads.AdView
-        android:id="@+id/adView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_alignParentBottom="true"
-        ads:adSize="BANNER"
-        ads:adUnitId="@string/banner_ad_unit_id"/>
-    
-</RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/left_drawer"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-       
         android:layout_gravity="start" >
+
         <include layout="@layout/slider_layout" />
     </RelativeLayout>
 

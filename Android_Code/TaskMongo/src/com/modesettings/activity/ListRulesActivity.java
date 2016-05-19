@@ -94,11 +94,12 @@ public class ListRulesActivity extends Activity {
 private void drawble()
 {
 	Mainmenu=(TextView)findViewById(R.id.Mainmenu);
-	Util.fontAwesomeApply(this, Mainmenu);
+	
 	Mainmenu.setOnClickListener(DrawerListener);
 	sliderOnClickListener();
 	setListenerOnDrawer();
 	sliderMenu=(TextView)findViewById(R.id.Slidermenu);
+	Util.fontAwesomeApply(this, Mainmenu,sliderMenu);
 	sliderMenu.setOnClickListener(new View.OnClickListener() {
 
 		@Override
