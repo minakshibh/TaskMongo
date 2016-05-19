@@ -1,6 +1,9 @@
 package com.modesetting.calendar;
 
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -178,41 +181,264 @@ public class CalendarActivity extends Activity {
 	private void goToNext(String event_Title, String event_Desc,
 			String event_Start, String event_end) {
 		// TODO Auto-generated method stub
-		String outStartDate = null;
-		String outEndDate = null;
-		String startDay = null;
+		String startTime = null;
+		String endTime = null,startDate=null;
+		String startDay = null,endDate=null;
 		String inFormatter = "E MMM dd HH:mm:ss Z yyyy";// Event Start: Mon May
 														// 02 05:30:00 IST 2016
-		// String outFormatter= "yyyy-MM-dd hh:mm:ss a" ;
-		String TimeFormatter = "hh:mm:ss";
+		String outFormatter= "yyyy-MM-dd hh:mm:ss a" ;
+		String TimeFormatter = "HH:mm";
 		// String DateFormatter= "yyyy-MM-dd" ;
 		String DayFormatter = "E";
 		if (event_Start != null) {
 
 			try {
-				startDay = formateDateFromstring(inFormatter, DayFormatter, ""
-						+ event_Start);
-				outStartDate = formateDateFromstring(inFormatter,
-						TimeFormatter, "" + event_Start);
-				outEndDate = formateDateFromstring(inFormatter, TimeFormatter,
-						"" + event_end);
+				startDay = formateDateFromstring(inFormatter, DayFormatter, ""+ event_Start);
+				startTime = formateDateFromstring(inFormatter,TimeFormatter, "" + event_Start);
+				endTime = formateDateFromstring(inFormatter, TimeFormatter,"" + event_end);
 
-				// getStartDate=formateDateFromstring(DateFormatter,TimeFormatter,""+outStartDate);
-				// getEndDate=formateDateFromstring(DateFormatter,TimeFormatter,""+outEndDate);
+				 startDate=formateDateFromstring(inFormatter,outFormatter,""+event_Start);
+				 endDate=formateDateFromstring(inFormatter,outFormatter,""+event_end);
+				if(startDay.equalsIgnoreCase("sun"))
+				{
+					
+					}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 
 		}
-		Intent mIntent = new Intent(CalendarActivity.this,
-				SettingsActivity.class);
+		int days=findDate(startDate,endDate);
+		System.err.println("days="+days);
+		String totalDays=selectDays(days,startDay);
+		
+		Intent mIntent = new Intent(CalendarActivity.this,SettingsActivity.class);
 		mIntent.putExtra("trigger", "calendar");
 		mIntent.putExtra("title", event_Title);
-		mIntent.putExtra("start", outStartDate);
-		mIntent.putExtra("end", outEndDate);
-		mIntent.putExtra("startDay", startDay);
+		mIntent.putExtra("start", startTime);
+		mIntent.putExtra("end", endTime);
+		mIntent.putExtra("startDay", totalDays);
 		startActivity(mIntent);
 		finish();
+	}
+
+	private String selectDays(int days,String dayName) {
+		// TODO Auto-generated method stub
+		String totalDays="";
+		if(days==1)
+		{
+			if(dayName.equalsIgnoreCase("sun"))
+			{
+				totalDays="Sun";
+			}
+			else if(dayName.equalsIgnoreCase("mon"))
+			{
+				totalDays="Mon";
+			}
+			else if(dayName.equalsIgnoreCase("tue"))
+			{
+				totalDays="Tue";
+			}
+			else if(dayName.equalsIgnoreCase("wed"))
+			{
+				totalDays="Wed";
+			}
+			else if(dayName.equalsIgnoreCase("thur"))
+			{
+				totalDays="Thur";
+			}
+			else if(dayName.equalsIgnoreCase("fri"))
+			{
+				totalDays="Fri";
+			}
+			else if(dayName.equalsIgnoreCase("sat"))
+			{
+				totalDays="Sat";
+			}
+			
+		}
+		else if(days==2){
+			if(dayName.equalsIgnoreCase("sun"))
+			{
+				totalDays="Sun,Mon";
+			}
+			else if(dayName.equalsIgnoreCase("mon"))
+			{
+				totalDays="Mon,Tue";
+			}
+			else if(dayName.equalsIgnoreCase("tue"))
+			{
+				totalDays="Tue,Wed";
+			}
+			else if(dayName.equalsIgnoreCase("wed"))
+			{
+				totalDays="Wed,Thur";
+			}
+			else if(dayName.equalsIgnoreCase("thur"))
+			{
+				totalDays="Thur,Fri";
+			}
+			else if(dayName.equalsIgnoreCase("fri"))
+			{
+				totalDays="Fri,Sat";
+			}
+			else if(dayName.equalsIgnoreCase("sat"))
+			{
+				totalDays="Sat,Sun";
+			}
+			
+		}
+		else if(days==3){
+			if(dayName.equalsIgnoreCase("sun"))
+			{
+				totalDays="Sun,Mon,Tue";
+			}
+			else if(dayName.equalsIgnoreCase("mon"))
+			{
+				totalDays="Mon,Tue,Wed";
+			}
+			else if(dayName.equalsIgnoreCase("tue"))
+			{
+				totalDays="Tue,Wed,Thur";
+			}
+			else if(dayName.equalsIgnoreCase("wed"))
+			{
+				totalDays="Wed,Thur,Fri";
+			}
+			else if(dayName.equalsIgnoreCase("thur"))
+			{
+				totalDays="Thur,Fri,Sat";
+			}
+			else if(dayName.equalsIgnoreCase("fri"))
+			{
+				totalDays="Fri,Sat,Sun";
+			}
+			else if(dayName.equalsIgnoreCase("sat"))
+			{
+				totalDays="Sat,Sun,Mon";
+			}	
+			}
+		else if(days==4){
+			if(dayName.equalsIgnoreCase("sun"))
+			{
+				totalDays="Sun,Mon,Tue,Wed";
+			}
+			else if(dayName.equalsIgnoreCase("mon"))
+			{
+				totalDays="Mon,Tue,Wed,Thur";
+			}
+			else if(dayName.equalsIgnoreCase("tue"))
+			{
+				totalDays="Tue,Wed,Thur,Fri";
+			}
+			else if(dayName.equalsIgnoreCase("wed"))
+			{
+				totalDays="Wed,Thur,Fri,Sat";
+			}
+			else if(dayName.equalsIgnoreCase("thur"))
+			{
+				totalDays="Thur,Fri,Sat,Sun";
+			}
+			else if(dayName.equalsIgnoreCase("fri"))
+			{
+				totalDays="Fri,Sat,Sun,Mon";
+			}
+			else if(dayName.equalsIgnoreCase("sat"))
+			{
+				totalDays="Sat,Sun,Mon,Tue";
+			}	
+		}
+		else if(days==5){
+			if(dayName.equalsIgnoreCase("sun"))
+			{
+				totalDays="Sun,Mon,Tue,Wed,Thur";
+			}
+			else if(dayName.equalsIgnoreCase("mon"))
+			{
+				totalDays="Mon,Tue,Wed,Thur,Fri";
+			}
+			else if(dayName.equalsIgnoreCase("tue"))
+			{
+				totalDays="Tue,Wed,Thur,Fri,Sat";
+			}
+			else if(dayName.equalsIgnoreCase("wed"))
+			{
+				totalDays="Wed,Thur,Fri,Sat,Sun";
+			}
+			else if(dayName.equalsIgnoreCase("thur"))
+			{
+				totalDays="Thur,Fri,Sat,Sun,Mon";
+			}
+			else if(dayName.equalsIgnoreCase("fri"))
+			{
+				totalDays="Fri,Sat,Sun,Mon,Tue";
+			}
+			else if(dayName.equalsIgnoreCase("sat"))
+			{
+				totalDays="Sat,Sun,Mon,Tue,Wed";
+			}	
+		}
+		else if(days==6){
+			if(dayName.equalsIgnoreCase("sun"))
+			{
+				totalDays="Sun,Mon,Tue,Wed,Thur,Fri";
+			}
+			else if(dayName.equalsIgnoreCase("mon"))
+			{
+				totalDays="Mon,Tue,Wed,Thur,Fri,Sat";
+			}
+			else if(dayName.equalsIgnoreCase("tue"))
+			{
+				totalDays="Tue,Wed,Thur,Fri,Sat,Sun";
+			}
+			else if(dayName.equalsIgnoreCase("wed"))
+			{
+				totalDays="Wed,Thur,Fri,Sat,Sun,Mon";
+			}
+			else if(dayName.equalsIgnoreCase("thur"))
+			{
+				totalDays="Thur,Fri,Sat,Sun,Mon,Tue";
+			}
+			else if(dayName.equalsIgnoreCase("fri"))
+			{
+				totalDays="Fri,Sat,Sun,Mon,Tue,Wed";
+			}
+			else if(dayName.equalsIgnoreCase("sat"))
+			{
+				totalDays="Sat,Sun,Mon,Tue,Wed,Thur";
+			}	
+		}
+		else{
+			if(dayName.equalsIgnoreCase("sun"))
+			{
+				totalDays="Sun,Mon,Tue,Wed,Thur,Fri,Sat";
+			}
+			else if(dayName.equalsIgnoreCase("mon"))
+			{
+				totalDays="Mon,Tue,Wed,Thur,Fri,Sat,Sun";
+			}
+			else if(dayName.equalsIgnoreCase("tue"))
+			{
+				totalDays="Tue,Wed,Thur,Fri,Sat,Sun,Mon";
+			}
+			else if(dayName.equalsIgnoreCase("wed"))
+			{
+				totalDays="Wed,Thur,Fri,Sat,Sun,Mon,Tue";
+			}
+			else if(dayName.equalsIgnoreCase("thur"))
+			{
+				totalDays="Thur,Fri,Sat,Sun,Mon,Tue,Wed";
+			}
+			else if(dayName.equalsIgnoreCase("fri"))
+			{
+				totalDays="Fri,Sat,Sun,Mon,Tue,Wed,Thur";
+			}
+			else if(dayName.equalsIgnoreCase("sat"))
+			{
+				totalDays="Sat,Sun,Mon,Tue,Wed,Thur,Fri";
+			}	
+		}
+		return totalDays;
 	}
 
 	public static String formateDateFromstring(String inputFormat,
@@ -236,5 +462,34 @@ public class CalendarActivity extends Activity {
 
 		return outputDate;
 
+	}
+	private int findDate(String date1,String date2) {
+		int day=0;
+		Date startDate = null, endDate = null;
+		try {
+			DateFormat dtimeformatter = new SimpleDateFormat("yyyy-MM-dd");
+			startDate = (Date) dtimeformatter.parse(date1);
+			endDate = (Date) dtimeformatter.parse(date2);
+
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+
+		Calendar cal1 = Calendar.getInstance();
+		cal1.setTime(startDate);
+		Calendar cal2 = Calendar.getInstance();
+		cal2.setTime(endDate);
+
+		System.err.println("cal=1=====" + cal1);
+		System.err.println("cal2======" + cal2);
+		day = getDaysDifference(cal1, cal2);
+		return day+1;
+	}
+	public static int getDaysDifference(Calendar calendar1, Calendar calendar2) {
+		if (calendar1 == null || calendar2 == null)
+			return 0;
+
+		return (int) ((calendar2.getTimeInMillis() - calendar1
+				.getTimeInMillis()) / (1000 * 60 * 60 * 24));
 	}
 }

@@ -66,21 +66,18 @@ public class ListRulesActivity extends Activity {
 	private void addShortcut() {
 	    //Adding shortcut for MainActivity 
 	    //on Home screen
-	    Intent shortcutIntent = new Intent(getApplicationContext(),
-	            SplashActivity.class);
+	    Intent shortcutIntent = new Intent(getApplicationContext(), SplashActivity.class);
 
 	    shortcutIntent.setAction(Intent.ACTION_MAIN);
 
 	    Intent addIntent = new Intent();
-	    addIntent
-	            .putExtra(Intent.EXTRA_SHORTCUT_INTENT, shortcutIntent);
+	    addIntent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, shortcutIntent);
 	    addIntent.putExtra(Intent.EXTRA_SHORTCUT_NAME, getResources().getString(R.string.app_name));
 	    addIntent.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE,
 	            Intent.ShortcutIconResource.fromContext(getApplicationContext(),
 	                    R.drawable.app_icon));
 
-	    addIntent
-	            .setAction("com.android.launcher.action.INSTALL_SHORTCUT");
+	    addIntent.setAction("com.android.launcher.action.INSTALL_SHORTCUT");
 	    getApplicationContext().sendBroadcast(addIntent);
 	}
 	

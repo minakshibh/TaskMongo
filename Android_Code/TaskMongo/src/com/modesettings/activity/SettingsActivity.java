@@ -12,8 +12,10 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
@@ -58,6 +60,8 @@ public class SettingsActivity extends Activity {
 		/*IntentFilter filter = new IntentFilter(TaskMongoAlarmReceiver.ACTION_ALARM);
 		BroadcastReceiver mReceiver = new TaskMongoAlarmReceiver();
 		registerReceiver(mReceiver, filter);*/
+		
+	
 		formatter = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss a" , Locale.getDefault());
 		
 		calendar = Calendar.getInstance();
@@ -103,7 +107,7 @@ public class SettingsActivity extends Activity {
 		tgModes[SILENT].setOnCheckedChangeListener(checkedChangeListener);
 		tgModes[VIBRATE].setOnCheckedChangeListener(checkedChangeListener);
 		
-		
+		keyBoard_Button();
 		trigger = getIntent().getStringExtra("trigger");
 	
 		if(trigger.equals("edit")){
@@ -153,6 +157,7 @@ public class SettingsActivity extends Activity {
 			String[] startTime = getStartTime.split(":");
 			startTimePicker.setCurrentHour(Integer.parseInt(startTime[0]));
 			startTimePicker.setCurrentMinute(Integer.parseInt(startTime[1]));
+		
 			
 			String getEndTime=getIntent().getStringExtra("end");
 			String[] endTime = getEndTime.split(":");
@@ -160,7 +165,7 @@ public class SettingsActivity extends Activity {
 			endTimePicker.setCurrentMinute(Integer.parseInt(endTime[1]));
 			
 			
-			String[] selection = getIntent().getStringExtra("startDay").split(", ");
+			String[] selection = getIntent().getStringExtra("startDay").split(",");
 			
 			for(int i = 0; i<selection.length; i++){
 				days.add(getDayIndex(selection[i]));
@@ -311,7 +316,20 @@ public class SettingsActivity extends Activity {
 			}
 		}
 	};
-
+	 private void  keyBoard_Button()
+	    {
+		 desc.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+	 			@Override
+				public boolean onEditorAction(TextView v, int actionId,KeyEvent event) {
+				    if (actionId == EditorInfo.IME_ACTION_NEXT) {
+		                   
+	                    Util.hideKeyboard(SettingsActivity.this);
+	                    return true;
+	                }
+	                return false;
+				}
+	        });
+	    }
 	private String getDate(Calendar time, int daysToAdd, TimePicker timePicker){
 		
 		time.add(Calendar.DATE, daysToAdd);
