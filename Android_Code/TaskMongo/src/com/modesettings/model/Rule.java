@@ -6,7 +6,7 @@ import android.os.Parcelable;
 
 public class Rule implements Parcelable{
 
-	private String startTime, endTime, mode, description, selectedDays, isEnabled = "true";
+	private String startTime, endTime, mode, description, selectedDays, isEnabled = "true",EventID;
 	private int id;
 	private ArrayList<TimingsData> timingsData;
 	
@@ -72,6 +72,16 @@ public class Rule implements Parcelable{
 		this.timingsData = timingsData;
 	}
 	
+	public String getEventID() {
+		return EventID;
+	}
+	public void setEventID(String eventID) {
+		EventID = eventID;
+	}
+	public static Parcelable.Creator<Rule> getCreator() {
+		return CREATOR;
+	}
+
 	public static final Parcelable.Creator<Rule> CREATOR
 	  = new Parcelable.Creator<Rule>() 
 	{
@@ -101,5 +111,6 @@ public class Rule implements Parcelable{
 		dest.writeString(selectedDays);
 		dest.writeString(isEnabled);
 		dest.writeInt(id);
+		dest.writeString(EventID);
 	}
 }

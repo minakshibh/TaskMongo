@@ -171,7 +171,29 @@ public class SettingsActivity extends Activity {
 				days.add(getDayIndex(selection[i]));
 			}
 			
+		}
+		/*else if(trigger.equalsIgnoreCase("calEdit"))
+		{
+			ruleId = getIntent().getIntExtra("ruleId", -1);
+			desc.setText(getIntent().getStringExtra("title"));
+			String getStartTime=getIntent().getStringExtra("start");
+			String[] startTime = getStartTime.split(":");
+			startTimePicker.setCurrentHour(Integer.parseInt(startTime[0]));
+			startTimePicker.setCurrentMinute(Integer.parseInt(startTime[1]));
+		
+			
+			String getEndTime=getIntent().getStringExtra("end");
+			String[] endTime = getEndTime.split(":");
+			endTimePicker.setCurrentHour(Integer.parseInt(endTime[0]));
+			endTimePicker.setCurrentMinute(Integer.parseInt(endTime[1]));
+			
+			
+			String[] selection = getIntent().getStringExtra("startDay").split(",");
+			
+			for(int i = 0; i<selection.length; i++){
+				days.add(getDayIndex(selection[i]));
 			}
+		}*/
 				
 		initDays(trigger);
 		
@@ -425,6 +447,13 @@ public class SettingsActivity extends Activity {
 		rule.setEndTime(eHour+":"+eMin);
 	
 		rule.setSelectedDays(getSelectedDays(days));
+		if(getIntent().getStringExtra("eventId")!=null)
+		{
+			rule.setEventID(getIntent().getStringExtra("eventId"));
+			}
+		else{
+			rule.setEventID("-1");
+		}
 		
 		ArrayList<TimingsData> timingsData = new ArrayList<TimingsData>();
 		

@@ -61,6 +61,7 @@ public class ListRulesActivity extends Activity {
             getSharedPreferences(Util.APP_PREFERENCE, Activity.MODE_PRIVATE).edit().putBoolean(Util.IS_ICON_CREATED, true).commit();
         }
         
+      
 	}
 
 	private void addShortcut() {
@@ -91,6 +92,8 @@ public class ListRulesActivity extends Activity {
 	private void getRules() {
 		SettingsDatabaseHandler dbHandler = new SettingsDatabaseHandler(
 				ListRulesActivity.this);
+		rules=new ArrayList<Rule>();
+		rules.clear();
 		rules = dbHandler.getRules();
 	}
 
@@ -207,10 +210,8 @@ public class ListRulesActivity extends Activity {
 								public void onClick(DialogInterface dialog,
 										int which) {
 									// TODO Auto-generated method stub
-									SettingsDatabaseHandler dbHandler = new SettingsDatabaseHandler(
-											ListRulesActivity.this);
-									dbHandler.deleteRule(selectedRule
-											.getId());
+									SettingsDatabaseHandler dbHandler = new SettingsDatabaseHandler(ListRulesActivity.this);
+									dbHandler.deleteRule(selectedRule.getId());
 									Util.refreshAllAlarms(ListRulesActivity.this);
 									
 									refreshListView();
