@@ -55,7 +55,7 @@
             android:name="com.modesetting.gps.AddLocationActivity"
             android:screenOrientation="portrait"
           />
-             <activity
+          <activity
             android:name="com.modesetting.gps.ListLocationActivity"
             android:screenOrientation="portrait"
           />

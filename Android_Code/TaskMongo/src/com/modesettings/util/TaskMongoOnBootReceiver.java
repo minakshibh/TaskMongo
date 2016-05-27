@@ -1,5 +1,7 @@
 package com.modesettings.util;
 
+
+import com.modesettings.activity.ListRulesActivity;
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -19,7 +21,8 @@ public class TaskMongoOnBootReceiver extends BroadcastReceiver{
     	try{
     		Toast.makeText(context, "Starting Mongos...", Toast.LENGTH_LONG).show();
     	   Util.refreshAllAlarms(context);
-    	
+    	 //start services
+   			ListRulesActivity.startLocationService(context);
     	}catch(Exception e){
     		AlertDialog.Builder alert = new AlertDialog.Builder(context);
     		alert.setTitle("Exception");

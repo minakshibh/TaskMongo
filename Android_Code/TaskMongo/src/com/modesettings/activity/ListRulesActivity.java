@@ -23,6 +23,8 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.daimajia.swipe.adapters.BaseSwipeAdapter;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
@@ -48,6 +50,7 @@ public class ListRulesActivity extends Activity {
 	public DrawerLayout mDrawerLayout;
 	public RelativeLayout flyoutDrawerRl;
 	public AlphaAnimation buttonClick = new AlphaAnimation(1F, 0.2F);
+	
 	TextView slider,sliderMenu;
 	TextView Mainmenu;
 	private LinearLayout lay_mylocation,lay_addLocation;
@@ -58,8 +61,7 @@ public class ListRulesActivity extends Activity {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_listrules);
 		
-		//satrt services
-		startService(new Intent(ListRulesActivity.this,BackgroundLocationService.class));
+	
 		dbHandler = new SettingsDatabaseHandler(ListRulesActivity.this);
 
 		initialTimeFormat = new SimpleDateFormat("HH:mm");
@@ -71,7 +73,8 @@ public class ListRulesActivity extends Activity {
 		flyoutDrawerRl = (RelativeLayout) findViewById(R.id.left_drawer);
 		lay_mylocation=(LinearLayout)findViewById(R.id.lay_mylocation);
 		lay_addLocation=(LinearLayout)findViewById(R.id.lay_addLocation);
-		drawble();
+		drawbleLayout();
+		startLocationService(getApplicationContext());
 		
 		addRule = (TextView) findViewById(R.id.btnAdd);
 		addRule.setVisibility(View.GONE);
@@ -91,7 +94,7 @@ public class ListRulesActivity extends Activity {
         }
         
 	}
-private void drawble()
+private void drawbleLayout()
 {
 	Mainmenu=(TextView)findViewById(R.id.Mainmenu);
 	
@@ -385,4 +388,15 @@ private void setListenerOnDrawer() {
 		getRules();
 		ruleListView.setAdapter(new RuleAdapter(ListRulesActivity.this));
 	}
+	public static void startLocationService(Context context)
+	{
+		//start services
+		stopLocationService(context);
+		context.startService(new Intent(context,BackgroundLocationService.class));
+		}
+	public static void stopLocationService(Context context)
+	{
+		//stop services
+		context.stopService(new Intent(context,BackgroundLocationService.class));
+		}
 }

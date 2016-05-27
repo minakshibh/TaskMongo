@@ -73,7 +73,7 @@ public class ListLocationActivity extends Activity {
 
 		AlertDialog.Builder builder = new AlertDialog.Builder(
 				ListLocationActivity.this);
-		builder.setTitle("Location save");
+		builder.setTitle("Select location name");
 		builder.setSingleChoiceItems(items, -1,
 				new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int item) {
@@ -108,7 +108,7 @@ public class ListLocationActivity extends Activity {
 	private void gotoNext(final String value) {
 		boolean locationAlreadySave = false;
 		getPosition = 0;
-		arrayLatLng = Util.getLocations(getApplicationContext());
+		arrayLatLng = GpsUtil.getLocations(getApplicationContext());
 		if (arrayLatLng != null && arrayLatLng.size() > 0) {
 			for (int i = 0; i < arrayLatLng.size(); i++) {
 
@@ -128,12 +128,14 @@ public class ListLocationActivity extends Activity {
 				alert.setNegativeButton("Yes",
 						new DialogInterface.OnClickListener() {
 							@Override
-							public void onClick(DialogInterface dialog,
-									int which) {
+							public void onClick(DialogInterface dialog,int which) {
 
-								Util.removeLocation(getApplicationContext(),
-										getPosition);
-								IntentNext(value);
+								Intent mIntent = new Intent(ListLocationActivity.this,AddLocationActivity.class);
+								mIntent.putExtra("locationName", arrayLatLng.get(getPosition).getLocationName());
+								mIntent.putExtra("edit", "edit");
+								mIntent.putExtra("position",getPosition );
+								startActivity(mIntent);
+								//finish();
 							}
 						});
 				alert.show();
@@ -183,7 +185,7 @@ public class ListLocationActivity extends Activity {
 								location = userInput.getText().toString();
 
 								if (location.equals("")) {
-									Util.ToastMessage(
+									GpsUtil.ToastMessage(
 											ListLocationActivity.this,
 											"Please enter location name");
 								}
@@ -192,7 +194,7 @@ public class ListLocationActivity extends Activity {
 
 									boolean locationAlreadySave = false;
 									getOtherPosition = 0;
-									arrayLatLng = Util
+									arrayLatLng = GpsUtil
 											.getLocations(getApplicationContext());
 									if (arrayLatLng != null
 											&& arrayLatLng.size() > 0) {
@@ -221,7 +223,7 @@ public class ListLocationActivity extends Activity {
 																DialogInterface dialog,
 																int which) {
 
-															Util.removeLocation(
+															GpsUtil.removeLocation(
 																	getApplicationContext(),
 																	getOtherPosition);
 															IntentNext(location);
@@ -236,7 +238,7 @@ public class ListLocationActivity extends Activity {
 										}
 									} else {
 
-										Util.hideKeyboard(ListLocationActivity.this);
+										GpsUtil.hideKeyboard(ListLocationActivity.this);
 										IntentNext(location);
 									}
 								}
@@ -251,8 +253,7 @@ public class ListLocationActivity extends Activity {
 	}
 
 	private void IntentNext(String value) {
-		Intent mIntent = new Intent(ListLocationActivity.this,
-				AddLocationActivity.class);
+		Intent mIntent = new Intent(ListLocationActivity.this,AddLocationActivity.class);
 		mIntent.putExtra("locationName", value);
 		startActivity(mIntent);
 		finish();
@@ -260,7 +261,7 @@ public class ListLocationActivity extends Activity {
 
 	private void setAddressAdapter() {
 		// getting from SharedPreferences
-		arrayLatLng = Util.getLocations(getApplicationContext());
+		arrayLatLng = GpsUtil.getLocations(getApplicationContext());
 		if (arrayLatLng != null) {
 			ListAdapter adapter = new ListAdapter(getApplicationContext(),
 					arrayLatLng);
@@ -347,9 +348,9 @@ public class ListLocationActivity extends Activity {
 								@Override
 								public void onClick(DialogInterface dialog,
 										int which) {
-									Util.removeLocation(getApplicationContext(), position);
+									GpsUtil.removeLocation(getApplicationContext(), position);
 									arrayLatLng.clear();
-									arrayLatLng = Util
+									arrayLatLng = GpsUtil
 											.getLocations(getApplicationContext());
 									if (arrayLatLng != null) {
 										ListAdapter adapter = new ListAdapter(
@@ -370,14 +371,14 @@ public class ListLocationActivity extends Activity {
 				@Override
 				public void onClick(View v) {
 				
-					IntentNext(arrayLatLng.get(position).getLocationName());
+					//IntentNext(arrayLatLng.get(position).getLocationName());
 					
 					Intent mIntent = new Intent(ListLocationActivity.this,AddLocationActivity.class);
 					mIntent.putExtra("locationName", arrayLatLng.get(position).getLocationName());
 					mIntent.putExtra("edit", "edit");
 					mIntent.putExtra("position",position );
 					startActivity(mIntent);
-					finish();
+					
 				}
 			});
 

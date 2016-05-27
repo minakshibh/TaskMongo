@@ -134,7 +134,6 @@ public class AddLocationActivity extends AppCompatActivity implements
 			}
 		});
 		btnBack.setOnClickListener(new View.OnClickListener() {
-
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
@@ -213,7 +212,7 @@ public class AddLocationActivity extends AppCompatActivity implements
 		if(Edit!=null)
 		{
 			position=getIntent().getIntExtra("position",0);
-			Util.removeLocation(getApplicationContext(), position);
+			GpsUtil.removeLocation(getApplicationContext(), position);
 			}
 		
 		arrayLatLng = new ArrayList<LocationDetails>();
@@ -227,7 +226,7 @@ public class AddLocationActivity extends AppCompatActivity implements
 		latlog.setMode(mode);
 		arrayLatLng.add(latlog);
 		// add to SharedPreferences
-		Util.addLocation(getApplicationContext(), latlog);
+		GpsUtil.addLocation(getApplicationContext(), latlog);
 		// Toast.makeText(AddLocationActivity.this,
 		// "Location save successfully..!", Toast.LENGTH_SHORT).show();
 		Intent intent = new Intent(AddLocationActivity.this,
@@ -308,7 +307,7 @@ public class AddLocationActivity extends AppCompatActivity implements
 			StringBuilder sb = new StringBuilder(
 					"https://maps.googleapis.com/maps/api/place/autocomplete/json?input="
 							+ input.replace(" ", "%20") + "&sensor=true&key="
-							+ Util.serverKey);
+							+ GpsUtil.serverKey);
 			URL url = new URL(sb.toString());
 			conn = (HttpURLConnection) url.openConnection();
 			InputStreamReader in = new InputStreamReader(conn.getInputStream());
@@ -593,7 +592,8 @@ public class AddLocationActivity extends AppCompatActivity implements
 
 				sub1 = returnedAddress.getSubThoroughfare();
 				sub2 = returnedAddress.getThoroughfare();
-				sub3 = returnedAddress.getPostalCode();
+				sub3 = returnedAddress.getLocality();
+				//sub3 = returnedAddress.getPostalCode();
 
 				String address = sub1 + " " + sub2 + " " + sub3;
 

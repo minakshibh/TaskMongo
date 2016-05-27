@@ -1,5 +1,8 @@
 package com.modesettings.util;
 
+import com.modesetting.gps.BackgroundLocationService;
+import com.modesettings.activity.ListRulesActivity;
+
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -26,7 +29,8 @@ public class TaskMongoAlarmReceiver extends BroadcastReceiver {
 	
 	 @Override
 	 public void onReceive(Context context, Intent intent) {
-		 
+	
+	
 	  Bundle bundle = intent.getExtras();
 	  String action = bundle.getString(ACTION_ALARM);
 	  String mode = bundle.getString(ACTION_MODE);

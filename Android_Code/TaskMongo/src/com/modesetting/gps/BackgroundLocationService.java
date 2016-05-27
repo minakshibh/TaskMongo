@@ -20,9 +20,9 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.model.LatLng;
 import com.modesettings.model.LocationDetails;
 import com.modesettings.util.TaskMongoAlarmReceiver;
+import com.modesettings.util.Util;
 
 public class BackgroundLocationService extends Service implements
 		GoogleApiClient.ConnectionCallbacks,
@@ -40,7 +40,8 @@ public class BackgroundLocationService extends Service implements
 
 	public ArrayList<LocationDetails> arrayLatLng = new ArrayList<LocationDetails>();
 
-	private boolean saveExiting = false;
+	private int changeAllAlarmMode=0;
+	private boolean refreshAlarm=true;
 
 	@Override
 	public void onCreate() {
@@ -101,7 +102,8 @@ public class BackgroundLocationService extends Service implements
 	@Override
 	public void onLocationChanged(Location location) {
 		// Report to the UI that the location was updated
-
+		boolean inLocation=false;
+		String mode="";
 		// Double lat= Double.parseDouble("30.711161373760145");
 		// Double lng=Double.parseDouble("76.71124957501888");
 		// LatLng loc=new LatLng(lat,lng);
@@ -109,10 +111,11 @@ public class BackgroundLocationService extends Service implements
 		String msg = Double.toString(location.getLatitude()) + ","
 				+ Double.toString(location.getLongitude());
 
-		saveExiting = false;
-		arrayLatLng = Util.getLocations(getApplicationContext());
+	
+		arrayLatLng = GpsUtil.getLocations(getApplicationContext());
 
 		if (arrayLatLng != null && arrayLatLng.size() > 0) {
+			refreshAlarm=true;
 			System.err.println("size= " + arrayLatLng.size());
 			for (int i = 0; i < arrayLatLng.size(); i++) {
 				Double distance = DistanceCalculator.distance(
@@ -120,21 +123,43 @@ public class BackgroundLocationService extends Service implements
 						arrayLatLng.get(i).latiDouble,
 						arrayLatLng.get(i).logiDouble, "M");
 				if (distance < 1) {
-					showMessage(arrayLatLng.get(i).LocationName,
-							arrayLatLng.get(i).mode);
+					changeAllAlarmMode=0;
+					inLocation=true;
+					mode=arrayLatLng.get(i).mode;
+					}
 				}
-
+		
+			if(inLocation){	
+		
+				if(changeAllAlarmMode==0){
+					changeAllAlarmMode=1;
+					changeMode(mode);
+					Util.cancelAllAlarms(getApplicationContext());
+				}
+			}
+			else{
+			
+				if(changeAllAlarmMode==1){
+				Util.refreshAllAlarms(getApplicationContext());
+				changeAllAlarmMode=0;
+				}
 			}
 
+		}
+		else{
+			if(refreshAlarm){
+				refreshAlarm=false;
+				Util.refreshAllAlarms(getApplicationContext());
+				}
 		}
 
 		System.err.println("current location=" + msg);
 
 	}
 
-	private void showMessage(String locationName, String mode) {
+	private void changeMode(String mode) {
 
-		System.err.println("location name=" + locationName + " mode=" + mode);
+	//	System.err.println("location name=" + locationName + " mode=" + mode);
 		// Util.ToastMessage(getApplicationContext(),
 		// locationName+" location in 1 M Circle, Mode="+mode);
 

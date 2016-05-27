@@ -16,7 +16,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class Util {
+public class GpsUtil {
 	static Context context;
 	static public String network_error = "Please check your internet connection, try again";
 	static int statusCode;
@@ -25,7 +25,7 @@ public class Util {
 	public static final String PREFS_NAME = "NKDROID_APP";
 	public static final String Loation = "loation";
 
-	public Util() {
+	public GpsUtil() {
 		super();
 	}
 
