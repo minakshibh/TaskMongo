@@ -93,6 +93,7 @@ public class ListRulesActivity extends Activity {
             getSharedPreferences(Util.APP_PREFERENCE, Activity.MODE_PRIVATE).edit().putBoolean(Util.IS_ICON_CREATED, true).commit();
         }
         
+      
 	}
 private void drawbleLayout()
 {
@@ -167,21 +168,18 @@ private void setListenerOnDrawer() {
 	private void addShortcut() {
 	    //Adding shortcut for MainActivity 
 	    //on Home screen
-	    Intent shortcutIntent = new Intent(getApplicationContext(),
-	            SplashActivity.class);
+	    Intent shortcutIntent = new Intent(getApplicationContext(), SplashActivity.class);
 
 	    shortcutIntent.setAction(Intent.ACTION_MAIN);
 
 	    Intent addIntent = new Intent();
-	    addIntent
-	            .putExtra(Intent.EXTRA_SHORTCUT_INTENT, shortcutIntent);
+	    addIntent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, shortcutIntent);
 	    addIntent.putExtra(Intent.EXTRA_SHORTCUT_NAME, getResources().getString(R.string.app_name));
 	    addIntent.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE,
 	            Intent.ShortcutIconResource.fromContext(getApplicationContext(),
 	                    R.drawable.app_icon));
 
-	    addIntent
-	            .setAction("com.android.launcher.action.INSTALL_SHORTCUT");
+	    addIntent.setAction("com.android.launcher.action.INSTALL_SHORTCUT");
 	    getApplicationContext().sendBroadcast(addIntent);
 	}
 	
@@ -195,6 +193,8 @@ private void setListenerOnDrawer() {
 	private void getRules() {
 		SettingsDatabaseHandler dbHandler = new SettingsDatabaseHandler(
 				ListRulesActivity.this);
+		rules=new ArrayList<Rule>();
+		rules.clear();
 		rules = dbHandler.getRules();
 	}
 
@@ -325,10 +325,8 @@ private void setListenerOnDrawer() {
 								public void onClick(DialogInterface dialog,
 										int which) {
 									// TODO Auto-generated method stub
-									SettingsDatabaseHandler dbHandler = new SettingsDatabaseHandler(
-											ListRulesActivity.this);
-									dbHandler.deleteRule(selectedRule
-											.getId());
+									SettingsDatabaseHandler dbHandler = new SettingsDatabaseHandler(ListRulesActivity.this);
+									dbHandler.deleteRule(selectedRule.getId());
 									Util.refreshAllAlarms(ListRulesActivity.this);
 									
 									refreshListView();

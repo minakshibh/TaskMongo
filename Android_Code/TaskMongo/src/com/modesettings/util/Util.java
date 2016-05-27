@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 import android.R.bool;
+import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -12,6 +13,8 @@ import android.graphics.Typeface;
 import android.sax.EndTextElementListener;
 import android.util.Log;
 import android.widget.TextView;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 import com.modesettings.model.Rule;
@@ -392,6 +395,17 @@ public class Util {
 		
 		Toast.makeText(context, message, Toast.LENGTH_LONG).show();
 	}
+	
+	 static public void hideKeyboard(Context cxt) {
+	        //   context=cxt;
+	        InputMethodManager inputManager = (InputMethodManager) cxt.getSystemService(Context.INPUT_METHOD_SERVICE);
+
+	        // check if no view has focus:
+	        View view = ((Activity) cxt).getCurrentFocus();
+	        if (view != null) {
+	            inputManager.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+	        }
+	    }
 
 	 public static void fontAwesomeApply(Context act,TextView...params)
 	    {
