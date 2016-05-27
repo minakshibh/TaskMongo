@@ -154,7 +154,7 @@ public class Util {
 		context = ctx;
 		
 		cancelAllAlarms(context);
-
+		Log.e("refresh","refreshAllAlarms");
 		SettingsDatabaseHandler dbHandler = new SettingsDatabaseHandler(context);
 		ArrayList<Integer> days = new ArrayList<Integer>();
 

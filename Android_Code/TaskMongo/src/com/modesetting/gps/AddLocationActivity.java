@@ -136,7 +136,8 @@ public class AddLocationActivity extends AppCompatActivity implements
 		btnBack.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
+				Intent intent = new Intent(AddLocationActivity.this,ListLocationActivity.class);
+				startActivity(intent);
 				finish();
 			}
 		});
@@ -229,8 +230,7 @@ public class AddLocationActivity extends AppCompatActivity implements
 		GpsUtil.addLocation(getApplicationContext(), latlog);
 		// Toast.makeText(AddLocationActivity.this,
 		// "Location save successfully..!", Toast.LENGTH_SHORT).show();
-		Intent intent = new Intent(AddLocationActivity.this,
-				ListLocationActivity.class);
+		Intent intent = new Intent(AddLocationActivity.this,ListLocationActivity.class);
 		startActivity(intent);
 		finish();
 	}

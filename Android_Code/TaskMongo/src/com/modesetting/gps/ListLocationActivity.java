@@ -122,7 +122,7 @@ public class ListLocationActivity extends Activity {
 			if (locationAlreadySave) {
 				AlertDialog.Builder alert = new AlertDialog.Builder(
 						ListLocationActivity.this);
-				alert.setTitle("Location aleady save for " + value);
+				alert.setTitle("Location already saved for " + value);
 				alert.setMessage("Do you want to change this location?");
 				alert.setPositiveButton("No", null);
 				alert.setNegativeButton("Yes",
@@ -135,7 +135,7 @@ public class ListLocationActivity extends Activity {
 								mIntent.putExtra("edit", "edit");
 								mIntent.putExtra("position",getPosition );
 								startActivity(mIntent);
-								//finish();
+								finish();
 							}
 						});
 				alert.show();
@@ -211,7 +211,7 @@ public class ListLocationActivity extends Activity {
 										if (locationAlreadySave) {
 											AlertDialog.Builder alert = new AlertDialog.Builder(
 													ListLocationActivity.this);
-											alert.setTitle("Location aleady save for "
+											alert.setTitle("Location already saved for "
 													+ location);
 											alert.setMessage("Do you want to change this location?");
 											alert.setPositiveButton("No", null);
@@ -223,10 +223,16 @@ public class ListLocationActivity extends Activity {
 																DialogInterface dialog,
 																int which) {
 
-															GpsUtil.removeLocation(
+														/*	GpsUtil.removeLocation(
 																	getApplicationContext(),
 																	getOtherPosition);
-															IntentNext(location);
+															IntentNext(location);*/
+															Intent mIntent = new Intent(ListLocationActivity.this,AddLocationActivity.class);
+															mIntent.putExtra("locationName", arrayLatLng.get(getOtherPosition).getLocationName());
+															mIntent.putExtra("edit", "edit");
+															mIntent.putExtra("position",getOtherPosition );
+															startActivity(mIntent);
+															finish();
 														}
 													});
 											alert.show();
@@ -378,6 +384,7 @@ public class ListLocationActivity extends Activity {
 					mIntent.putExtra("edit", "edit");
 					mIntent.putExtra("position",position );
 					startActivity(mIntent);
+					finish();
 					
 				}
 			});
