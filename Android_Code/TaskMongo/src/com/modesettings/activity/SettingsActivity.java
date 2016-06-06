@@ -575,7 +575,16 @@ public class SettingsActivity extends Activity {
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
 					// TODO Auto-generated method stub
-					finish();
+					if(trigger.equalsIgnoreCase("calendar"))
+					{
+						Intent intent = new Intent(SettingsActivity.this,ListRulesActivity.class);
+						startActivity(intent);
+						finish();
+						}
+					else{
+						
+						finish();
+						}
 				}
 			});
 			alert.show();
