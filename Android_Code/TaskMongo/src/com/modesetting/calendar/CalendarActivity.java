@@ -168,8 +168,8 @@ public class CalendarActivity extends Activity {
 					dbHandler.deleteRule(deleteId);
 					Util.refreshAllAlarms(CalendarActivity.this);
 					Toast.makeText(getApplicationContext(), "This event deleted successfully in task mongo app", Toast.LENGTH_SHORT).show();
-					Intent intent = new Intent(CalendarActivity.this,ListRulesActivity.class);
-					startActivity(intent);
+					//Intent intent = new Intent(CalendarActivity.this,ListRulesActivity.class);
+					//startActivity(intent);
 					finish();
 			       	
 		        	}
@@ -618,7 +618,7 @@ private void saveEditRule(String title,String getStartTime,String getEndTime,Str
 		
 		SettingsDatabaseHandler dbHandler = new SettingsDatabaseHandler(CalendarActivity.this);
 		int id = dbHandler.saveRule(rule, editRuleId);
-		
+		System.err.println(" "+rule+" "+editRuleId);
 		if(id!=-1){
 			Util.refreshAllAlarms(CalendarActivity.this);
 			Toast.makeText(getApplicationContext(), "This event edited successfully in task mongo app", Toast.LENGTH_SHORT).show();

@@ -21,6 +21,7 @@ public class Rule implements Parcelable{
 		 selectedDays = source.readString();
 		 isEnabled = source.readString();
 		 id = source.readInt();
+		 EventID=source.readString();
 	}
 	 	 
 	public String getIsEnabled() {

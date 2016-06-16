@@ -21,10 +21,11 @@ public class CalendarChangedReceiver extends BroadcastReceiver{
 
 			 try{
 	          Intent mIntent=new Intent(context,CalendarActivity.class);
-	          mIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+	          mIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 	          context.startActivity(mIntent);
 			 }catch(Exception e)
 			 {
+				 e.printStackTrace();
 				Util.toast(e.getMessage(), context);
 			 }
 		 }else{
