@@ -418,10 +418,11 @@ public class SettingsActivity extends Activity {
     
 	private void saveRule(){
 
-		Rule rule = new Rule();
-		rule.setDescription(desc.getText().toString().trim());
-		rule.setMode(selectedMode);
-		rule.setIsEnabled("true");
+		//Rule rule = new Rule();
+		Rule newRule = new Rule();
+		newRule.setDescription(desc.getText().toString().trim());
+		newRule.setMode(selectedMode);
+		newRule.setIsEnabled("true");
 		String sHour, sMin, eHour, eMin;
 		
 		if(startTimePicker.getCurrentHour()<10)
@@ -444,16 +445,19 @@ public class SettingsActivity extends Activity {
 		else
 			eMin = "" +endTimePicker.getCurrentMinute();
 		
-		rule.setStartTime(sHour+":"+sMin);
-		rule.setEndTime(eHour+":"+eMin);
+		newRule.setStartTime(sHour+":"+sMin);
+		newRule.setEndTime(eHour+":"+eMin);
 	
-		rule.setSelectedDays(getSelectedDays(days));
+		newRule.setSelectedDays(getSelectedDays(days));
 		if(getIntent().getStringExtra("eventId")!=null)
 		{
-			rule.setEventID(getIntent().getStringExtra("eventId"));
+			newRule.setEventID(getIntent().getStringExtra("eventId"));
 			}
+		else if(trigger.equalsIgnoreCase("edit")){
+			newRule.setEventID(rule.getEventID());
+		}
 		else{
-			rule.setEventID("-1");
+			newRule.setEventID("-1");
 		}
 		
 		ArrayList<TimingsData> timingsData = new ArrayList<TimingsData>();
@@ -467,20 +471,20 @@ public class SettingsActivity extends Activity {
 				
 				startTime = new TimingsData();
 				endTime = new TimingsData();
-				startTime.setTimings(rule.getStartTime());
-				startTime.setMode(rule.getMode());
-				startTime.setRuleId(rule.getId());
+				startTime.setTimings(newRule.getStartTime());
+				startTime.setMode(newRule.getMode());
+				startTime.setRuleId(newRule.getId());
 				startTime.setDay(day);
 				startTime.setType(TaskMongoAlarmReceiver.ACTION_START);
-				startTime.setEndTimings(rule.getEndTime());
+				startTime.setEndTimings(newRule.getEndTime());
 				
 				if(!isTimeCorrect()){
 
 					startTime.setEndTimings("23:59");
 					tempEndTime = new TimingsData();
 					tempEndTime.setTimings("23:59");
-					tempEndTime.setMode(rule.getMode());
-					tempEndTime.setRuleId(rule.getId());
+					tempEndTime.setMode(newRule.getMode());
+					tempEndTime.setRuleId(newRule.getId());
 					tempEndTime.setType(TaskMongoAlarmReceiver.ACTION_END);
 					tempEndTime.setDay(day);
 					
@@ -492,11 +496,11 @@ public class SettingsActivity extends Activity {
 					
 					tempStartTime = new TimingsData();
 					tempStartTime.setTimings("00:00");
-					tempStartTime.setMode(rule.getMode());
-					tempStartTime.setRuleId(rule.getId());
+					tempStartTime.setMode(newRule.getMode());
+					tempStartTime.setRuleId(newRule.getId());
 					tempStartTime.setDay(day);
 					tempStartTime.setType(TaskMongoAlarmReceiver.ACTION_START);
-					tempStartTime.setEndTimings(rule.getEndTime());
+					tempStartTime.setEndTimings(newRule.getEndTime());
 					
 					timingsData.add(tempEndTime);
 					timingsData.add(tempStartTime);
@@ -504,9 +508,9 @@ public class SettingsActivity extends Activity {
 				
 //				Date eDate = formatter.parse(rData.getEndDateTime());
 				
-				endTime.setTimings(rule.getEndTime());
-				endTime.setMode(rule.getMode());
-				endTime.setRuleId(rule.getId());
+				endTime.setTimings(newRule.getEndTime());
+				endTime.setMode(newRule.getMode());
+				endTime.setRuleId(newRule.getId());
 				endTime.setType(TaskMongoAlarmReceiver.ACTION_END);
 				endTime.setDay(day);
 				
@@ -557,10 +561,10 @@ public class SettingsActivity extends Activity {
 			ruleData.add(rule_data);
 		}
 		rule.setRuleData(ruleData);*/
-		rule.setTimingsData(timingsData);
+		newRule.setTimingsData(timingsData);
 		
 		SettingsDatabaseHandler dbHandler = new SettingsDatabaseHandler(SettingsActivity.this);
-		int id = dbHandler.saveRule(rule, ruleId);
+		int id = dbHandler.saveRule(newRule, ruleId);
 		
 		if(id!=-1){
 //			Rule savedRule = dbHandler.getRule(id);
@@ -576,7 +580,16 @@ public class SettingsActivity extends Activity {
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
 					// TODO Auto-generated method stub
-					finish();
+					if(trigger.equalsIgnoreCase("calendar"))
+					{
+						Intent intent = new Intent(SettingsActivity.this,ListRulesActivity.class);
+						startActivity(intent);
+						finish();
+						}
+					else{
+						
+						finish();
+						}
 				}
 			});
 			alert.show();

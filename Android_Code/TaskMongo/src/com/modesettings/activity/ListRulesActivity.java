@@ -89,8 +89,9 @@ public class ListRulesActivity extends Activity {
         mAdView.loadAd(adRequest);
         
         if(!getSharedPreferences(Util.APP_PREFERENCE, Activity.MODE_PRIVATE).getBoolean(Util.IS_ICON_CREATED, false)){
+        	getSharedPreferences(Util.APP_PREFERENCE, Activity.MODE_PRIVATE).edit().putBoolean(Util.IS_ICON_CREATED, true).commit();
             addShortcut();
-            getSharedPreferences(Util.APP_PREFERENCE, Activity.MODE_PRIVATE).edit().putBoolean(Util.IS_ICON_CREATED, true).commit();
+     
         }
         
       
