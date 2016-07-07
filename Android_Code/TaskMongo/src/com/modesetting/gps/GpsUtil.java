@@ -21,7 +21,7 @@ public class GpsUtil {
 	static public String network_error = "Please check your internet connection, try again";
 	static int statusCode;
 	static String share_location = "location";
-	public final static String serverKey = "AIzaSyB5PeH8UZgvq_oHdKmKQvb8WjlGchnTfO4";
+	public final static String serverKey = "AIzaSyASJKYucrtPylOFB0n_OPjpGu6fNkChdKY";
 	public static final String PREFS_NAME = "NKDROID_APP";
 	public static final String Loation = "loation";
 
