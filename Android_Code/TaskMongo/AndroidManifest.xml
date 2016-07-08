@@ -63,6 +63,10 @@
             android:name="com.modesetting.gps.ListLocationActivity"
             android:screenOrientation="portrait"
           />
+            <activity
+            android:name="com.modesettings.activity.HomeViewPagerActivity"
+            android:screenOrientation="portrait"
+          />
         <activity
         android:name="com.google.android.gms.ads.AdActivity"
         android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"/>
