@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@null"
-        android:hint="enter location type"
+        android:hint="enter location"
         android:inputType="text" >
 
         <requestFocus />
