@@ -9,5 +9,6 @@
    <color name="off_white">#eeeeee</color>
    <color name="light_grey">#aaaaaa</color>
     <color name="light_green">#5CA224</color>
+    <color name ="transparent">#00000000</color>
    
 </resources>
