@@ -19,6 +19,7 @@ import com.daimajia.swipe.adapters.BaseSwipeAdapter;
 import com.modesettings.activity.R;
 import com.modesettings.model.LocationDetails;
 import com.modesettings.util.TaskMongoAlarmReceiver;
+import com.modesettings.util.Util;
 
 public class ListLocationActivity extends Activity {
 	public ArrayList<LocationDetails> arrayLatLng;
@@ -61,7 +62,12 @@ public class ListLocationActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
+				if(Util.isNetworkAvailable(ListLocationActivity.this)){
 				addLocation();
+				}
+				else{
+					Util.alertMessage(ListLocationActivity.this,Util.network_error);
+				}
 			}
 		});
 	}

@@ -133,11 +133,12 @@ public class HomeViewPagerActivity extends Activity {
 	        	textView.setText("");
 	        }
 	        else{
+	        	
 	        	textView.setText("");
 	        }
 	        
 	        imageView =(ImageView)layout.findViewById(R.id.imageView);
-	    	imageView.setImageResource(imageId[position]);
+	    	imageView.setBackgroundResource(imageId[position]);
 	 
 	    	textView.setOnClickListener(new View.OnClickListener() {
 				

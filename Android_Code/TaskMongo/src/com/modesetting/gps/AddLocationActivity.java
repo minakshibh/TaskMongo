@@ -20,8 +20,10 @@ import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.Settings;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
@@ -59,6 +61,7 @@ public class AddLocationActivity extends AppCompatActivity implements
 	private double searchLat, searchLon, pickupLatitude, pickupLogitude;
 	private GoogleApiClient mGoogleApiClient;
 	private Location mLastLocation;
+	LocationManager locationManager;
 	private TextView txt_Save, btnBack;
 	private float currentZoom = 17;
 	private AutoCompleteTextView autotext_address;
@@ -377,7 +380,25 @@ public class AddLocationActivity extends AppCompatActivity implements
 		}
 	}
 
+	
 	private void mapInitialize() {
+		boolean enabledGPS = false ;
+		boolean enabledWiFi=false;
+		
+		
+		try{
+			locationManager = (LocationManager) AddLocationActivity.this.getSystemService(LOCATION_SERVICE);
+			enabledGPS = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+			enabledWiFi = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+
+			// Check if enabled and if not send user to the GSP settings
+			if (!enabledGPS && !enabledWiFi) {
+				showSettingsAlert();
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		
 		mGoogleApiClient = new GoogleApiClient.Builder(this)
 				.addConnectionCallbacks(this).addApi(LocationServices.API)
 				// .addApi(Places.GEO_DATA_API)
@@ -437,12 +458,17 @@ public class AddLocationActivity extends AppCompatActivity implements
 
 	private void initCameraPosition(Location location) {
 
+		try{
 		googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(
 				location.getLatitude(), location.getLongitude()), 17));
 		// Zoom in the Google Map
 		googleMap.animateCamera(CameraUpdateFactory.zoomTo(17));
 		System.err.println("" + location.getLatitude()
 				+ location.getLongitude());
+		}catch(Exception e)
+		{
+			e.printStackTrace();
+		}
 	}
 
 	@Override
@@ -625,4 +651,33 @@ public class AddLocationActivity extends AppCompatActivity implements
 			imm.hideSoftInputFromWindow(autotext_address.getWindowToken(), 0);
 		}
 	}
+	public void showSettingsAlert(){
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(AddLocationActivity.this);
+
+        // Setting Dialog Title
+        alertDialog.setTitle("GPS is settings");
+
+        // Setting Dialog Message
+        alertDialog.setMessage("GPS is not enabled. Do you want to go to settings menu?");
+
+        // On pressing the Settings button.
+        alertDialog.setPositiveButton("Settings", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog,int which) {
+                Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                startActivity(intent);
+            }
+        });
+
+        // On pressing the cancel button
+        alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+            dialog.cancel();
+            finish();
+            }
+        });
+
+        // Showing Alert Message
+        alertDialog.show();
+    }
+
 }

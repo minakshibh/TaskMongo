@@ -6,10 +6,15 @@ import java.util.Calendar;
 import android.R.bool;
 import android.app.Activity;
 import android.app.AlarmManager;
+import android.app.AlertDialog;
 import android.app.PendingIntent;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.DialogInterface.OnClickListener;
 import android.graphics.Typeface;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.sax.EndTextElementListener;
 import android.util.Log;
 import android.widget.TextView;
@@ -25,6 +30,7 @@ public class Util {
 	public static final String APP_PREFERENCE = "TaskMongoPreferences";
 	public static final String IS_ICON_CREATED = "IsIconCreated";
 	private static Context context;
+	static	public String network_error="Please check your internet connection, try again";
 	public static long milliSecondsForWeek = 7 * 24 * 60 * 60 * 1000;
 		
 //	public static ArrayList<Integer> alarmDataIds = new ArrayList<Integer>();
@@ -414,5 +420,28 @@ public class Util {
 	            tv.setTypeface(typeFace_icon);
 	        }
 	    }
+	 static public boolean isNetworkAvailable(Context mCtx) {
+		    ConnectivityManager connectivityManager 
+		          = (ConnectivityManager) mCtx.getSystemService(Context.CONNECTIVITY_SERVICE);
+		    NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+		    return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+		}
+	 static	public void alertMessage(final Context ctx,String str)
+		{
+			context=ctx;
+			AlertDialog.Builder alert = new AlertDialog.Builder(context);
+			alert.setTitle("");
+			alert.setMessage(str);
+			alert.setPositiveButton("OK", new OnClickListener() {
+				
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					// TODO Auto-generated method stub
+				
+				}
 
+			
+			});
+			alert.show();
+		}
 }

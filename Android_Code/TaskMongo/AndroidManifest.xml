@@ -57,6 +57,7 @@
         
             <activity
             android:name="com.modesetting.gps.AddLocationActivity"
+            android:windowSoftInputMode="stateHidden"
             android:screenOrientation="portrait"
           />
           <activity

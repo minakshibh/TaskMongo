@@ -569,7 +569,7 @@ private void saveEditRule(String title,String getStartTime,String getEndTime,Str
 			startTime.setType(TaskMongoAlarmReceiver.ACTION_START);
 			startTime.setEndTimings(rule.getEndTime());
 			
-		//	if(!isTimeCorrect()){
+			if(!isTimeCorrect(""+startTime,""+endTime)){
 
 				startTime.setEndTimings("23:59");
 				tempEndTime = new TimingsData();
@@ -595,7 +595,7 @@ private void saveEditRule(String title,String getStartTime,String getEndTime,Str
 				
 				timingsData.add(tempEndTime);
 				timingsData.add(tempStartTime);
-			//}
+			}
 		//	
 //			Date eDate = formatter.parse(rData.getEndDateTime());
 			
@@ -649,7 +649,47 @@ private void saveEditRule(String title,String getStartTime,String getEndTime,Str
 			return 0;    	
 	}
 
+	private boolean isTimeCorrect(String startTime,String endTime) {
+		/*if(startTimePicker.getCurrentHour()>endTimePicker.getCurrentHour())
+			return false;
+		else if(startTimePicker.getCurrentHour()==endTimePicker.getCurrentHour() && startTimePicker.getCurrentMinute()>=endTimePicker.getCurrentMinute())
+			return false;
+		else
+			return true;*/
 
+		float totalStartMins=0;
+		float totalEndMins=0;
+		        try {
+		            String[] parts = startTime.split(":");
+		            String part1 = parts[0]; //
+		            String part2 = parts[1]; //
+		            float fPart1 = Float.parseFloat(part1);
+		            float fPart2 = Float.parseFloat(part2);
+		            float hoursInMins = fPart1 * 60;
+		            totalStartMins = hoursInMins + fPart2;
+		  
+		            String[] parts2 = endTime.split(":");
+		            String part21 = parts2[0]; //
+		            String part22 = parts2[1]; //
+		            float fPart21 = Float.parseFloat(part21);
+		            float fPart22 = Float.parseFloat(part22);
+		            float hoursInMins2 = fPart21 * 60;
+		            totalEndMins = hoursInMins2 + fPart22;
+		            
+		            if(totalStartMins>totalEndMins){
+						return false;
+					}
+					else{
+						return true;
+					}
+		           
+		        } catch (Exception e) {
+		            e.printStackTrace();
+		            return true;
+		        }
+			
+		    
+	}
 	private String selectDays(int days,String dayName) {
 		// TODO Auto-generated method stub
 		String totalDays="";
