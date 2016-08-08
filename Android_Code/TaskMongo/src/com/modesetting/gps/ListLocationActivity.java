@@ -328,7 +328,8 @@ public class ListLocationActivity extends Activity {
 			// transparentLayer = (RelativeLayout)
 			// convertView.findViewById(R.id.transparentLayer);
 
-			locationName.setText(location.getLocationName());
+			
+			locationName.setText(location.getLocationName().toUpperCase());
 			latLng.setText(location.getLatiDouble() + " "
 					+ location.getLogiDouble());
 			latLng.setVisibility(View.GONE);

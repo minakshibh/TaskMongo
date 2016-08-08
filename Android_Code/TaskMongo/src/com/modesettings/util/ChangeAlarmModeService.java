@@ -2,6 +2,8 @@ package com.modesettings.util;
 
 import java.util.ArrayList;
 
+import com.modesetting.gps.BackgroundLocationService;
+
 import android.app.IntentService;
 import android.content.Context;
 import android.content.Intent;
@@ -36,8 +38,7 @@ public class ChangeAlarmModeService extends IntentService {
 			if (mode.equalsIgnoreCase(TaskMongoAlarmReceiver.SILENT_MODE)) {
 				am.setRingerMode(AudioManager.RINGER_MODE_SILENT);
 				Log.e("ChangeAlarmModeService", mode + " set");
-			} else if (mode
-					.equalsIgnoreCase(TaskMongoAlarmReceiver.NORMAL_MODE)) {
+			} else if (mode.equalsIgnoreCase(TaskMongoAlarmReceiver.NORMAL_MODE)) {
 				am.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
 				Log.e("ChangeAlarmModeService", mode + " set");
 			} else if (mode
@@ -47,6 +48,8 @@ public class ChangeAlarmModeService extends IntentService {
 			}
 		} else {
 			Log.e("Task Mongo", "id not found");
+			BackgroundLocationService.PriorityCheck=true;	
 		}
 	}
+
 }

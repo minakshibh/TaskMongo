@@ -53,7 +53,7 @@ public class ListRulesActivity extends Activity {
 	
 	TextView slider,sliderMenu;
 	TextView Mainmenu;
-	private LinearLayout lay_mylocation,lay_addLocation;
+	private LinearLayout lay_mylocation,lay_addLocation,lay_help;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +73,7 @@ public class ListRulesActivity extends Activity {
 		flyoutDrawerRl = (RelativeLayout) findViewById(R.id.left_drawer);
 		lay_mylocation=(LinearLayout)findViewById(R.id.lay_mylocation);
 		lay_addLocation=(LinearLayout)findViewById(R.id.lay_addLocation);
+		lay_help=(LinearLayout)findViewById(R.id.lay_help);
 		drawbleLayout();
 		startLocationService(getApplicationContext());
 		
@@ -120,6 +121,7 @@ public void sliderOnClickListener() {
 
 	lay_addLocation.setOnClickListener(clickListener);
 	lay_mylocation.setOnClickListener(clickListener);
+	lay_help.setOnClickListener(clickListener);
 	
 
 }
@@ -223,6 +225,12 @@ private void setListenerOnDrawer() {
 			    startActivity(intent);
 				DrawerLayoutClose();
 			} 
+			else if(v==lay_help)
+			{
+				Intent intent = new Intent(ListRulesActivity.this,HomeViewPagerActivity.class);
+			    startActivity(intent);
+				DrawerLayoutClose();
+			}
 		}
 	};
 

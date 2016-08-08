@@ -38,6 +38,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -73,6 +74,10 @@ public class AddLocationActivity extends AppCompatActivity implements
 	public ArrayList<LocationDetails> arrayLatLng;
 	private String trigger = "",Edit=null;
 	private int position=0;
+	private Spinner SpRedius;
+	private ArrayList<String> arrayListRadius=new ArrayList<String>();
+	private String selectRadius="-Select Radius-";
+	private String selectRadiusValues="0";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -83,10 +88,29 @@ public class AddLocationActivity extends AppCompatActivity implements
 		getSupportActionBar().hide();
 
 		setUI();
+		setRadius();
 		mapInitialize();
 		setAddressAdapter();
 		setOnClick();
+		
 
+	}
+
+	private void setRadius() {
+		// TODO Auto-generated method stub
+		arrayListRadius.clear();
+		arrayListRadius.add(selectRadius);
+		for(int i=1;i<=100;i++){
+			arrayListRadius.add(""+i);
+			}
+		//arrayListRadius.add(" ");
+		
+		ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(this,
+				R.layout.spinner_text, arrayListRadius);
+		spinnerArrayAdapter.setDropDownViewResource(R.layout.spinner_dropdown);
+		// Step 3: Tell the spinner about our adapter
+	    SpRedius.setAdapter(spinnerArrayAdapter);
+	    SpRedius.setSelection(3);
 	}
 
 	private void setUI() {
@@ -102,6 +126,7 @@ public class AddLocationActivity extends AppCompatActivity implements
 		autotext_address = (AutoCompleteTextView) findViewById(R.id.autotext_address);
 		txt_Save = (TextView) findViewById(R.id.txt_go);
 		btnBack = (TextView) findViewById(R.id.btnBack);
+		SpRedius=(Spinner)findViewById(R.id.spinnerRadius);
 	}
 
 	private void setAddressAdapter() {
@@ -149,39 +174,13 @@ public class AddLocationActivity extends AppCompatActivity implements
 			@Override
 			public void onClick(View v) {
 
-				final CharSequence[] items = { " Normal ", " Slient ",
-						" Vibrate " };
-
-				AlertDialog.Builder builder = new AlertDialog.Builder(
-						AddLocationActivity.this);
-				builder.setTitle("Select mode");
-				builder.setSingleChoiceItems(items, -1,
-						new DialogInterface.OnClickListener() {
-							public void onClick(DialogInterface dialog, int item) {
-
-								switch (item) {
-								case 0:
-									saveLocation(TaskMongoAlarmReceiver.NORMAL_MODE);
-									levelDialog.dismiss();
-									break;
-								case 1:
-									saveLocation(TaskMongoAlarmReceiver.SILENT_MODE);
-									levelDialog.dismiss();
-									break;
-								case 2:
-									saveLocation(TaskMongoAlarmReceiver.VIBRATE_MODE);
-									levelDialog.dismiss();
-									break;
-
-								}
-
-							}
-						});
-				// builder.setPositiveButton("Cancel", null);
-				levelDialog = builder.create();
-				levelDialog.show();
-
-			}
+				if(selectRadiusValues.equalsIgnoreCase(selectRadius)){
+					Toast.makeText(AddLocationActivity.this, "Please select radius", Toast.LENGTH_LONG).show();
+					
+				}else{
+					selectMode(selectRadiusValues);
+					}
+				}
 		});
 
 		imag_cross.setOnClickListener(new View.OnClickListener() {
@@ -193,8 +192,7 @@ public class AddLocationActivity extends AppCompatActivity implements
 			}
 		});
 
-		autotext_address
-				.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+		autotext_address.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 					public void onItemClick(AdapterView<?> parent, View view,
 							int position, long id) {
 						if (autotext_address.getText().toString().trim()
@@ -208,10 +206,23 @@ public class AddLocationActivity extends AppCompatActivity implements
 						}
 					}
 				});
+		SpRedius.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+			public void onItemSelected(AdapterView<?> arg0, View arg1,
+					int position, long arg3) {
+				// TODO Auto-generated method stub
+				selectRadiusValues=arrayListRadius.get(position);
+
+			}
+
+			public void onNothingSelected(AdapterView<?> arg0) {
+				// TODO Auto-generated method stub
+
+			}
+		});
 
 	}
 
-	private void saveLocation(String mode) {
+	private void saveLocation(String mode,String radius) {
 		
 		if(Edit!=null)
 		{
@@ -228,6 +239,7 @@ public class AddLocationActivity extends AppCompatActivity implements
 		latlog.setAddressName(pickupLabel);
 		latlog.setLocationName(trigger);
 		latlog.setMode(mode);
+		latlog.setRadius(radius);
 		arrayLatLng.add(latlog);
 		// add to SharedPreferences
 		GpsUtil.addLocation(getApplicationContext(), latlog);
@@ -679,5 +691,40 @@ public class AddLocationActivity extends AppCompatActivity implements
         // Showing Alert Message
         alertDialog.show();
     }
-
+	private void selectMode(final String radius)
+		{
+			final CharSequence[] items = { " Normal ", " Slient ",
+			" Vibrate " };
+		
+		AlertDialog.Builder builder = new AlertDialog.Builder(
+			AddLocationActivity.this);
+		builder.setTitle("Select mode");
+		builder.setSingleChoiceItems(items, -1,
+			new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int item) {
+		
+					switch (item) {
+					case 0:
+						saveLocation(TaskMongoAlarmReceiver.NORMAL_MODE,radius);
+						levelDialog.dismiss();
+						break;
+					case 1:
+						saveLocation(TaskMongoAlarmReceiver.SILENT_MODE,radius);
+						levelDialog.dismiss();
+						break;
+					case 2:
+						saveLocation(TaskMongoAlarmReceiver.VIBRATE_MODE,radius);
+						levelDialog.dismiss();
+						break;
+		
+					}
+		
+				}
+			});
+		// builder.setPositiveButton("Cancel", null);
+		levelDialog = builder.create();
+		levelDialog.show();
+		
+		}
+		
 }

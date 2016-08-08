@@ -38,6 +38,7 @@ public class BackgroundLocationService extends Service implements
 	public static final String LOCATION_BROADCAST_ACTION = "new location";
 	public static final String LOCATION_UPDATE_BROADCAST = "location_update";
 
+	public static boolean PriorityCheck;
 	public ArrayList<LocationDetails> arrayLatLng = new ArrayList<LocationDetails>();
 
 	private int changeAllAlarmMode=0;
@@ -122,7 +123,14 @@ public class BackgroundLocationService extends Service implements
 						location.getLatitude(), location.getLongitude(),
 						arrayLatLng.get(i).latiDouble,
 						arrayLatLng.get(i).logiDouble, "M");
-				if (distance < 1) {
+				int radius=1;
+				try{
+					radius=Integer.parseInt(arrayLatLng.get(i).radius);
+					System.err.println("rrrr="+radius+"dis="+distance);
+				}catch(Exception e){
+					
+				}
+				if (distance < radius) {
 					changeAllAlarmMode=0;
 					inLocation=true;
 					mode=arrayLatLng.get(i).mode;
@@ -133,7 +141,9 @@ public class BackgroundLocationService extends Service implements
 		
 				if(changeAllAlarmMode==0){
 					changeAllAlarmMode=1;
+					//if(PriorityCheck){
 					changeMode(mode);
+					//}
 					Util.cancelAllAlarms(getApplicationContext());
 				}
 			}

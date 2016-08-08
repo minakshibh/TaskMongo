@@ -16,12 +16,14 @@ import android.graphics.Typeface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.sax.EndTextElementListener;
+import android.text.style.BackgroundColorSpan;
 import android.util.Log;
 import android.widget.TextView;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
+import com.modesetting.gps.BackgroundLocationService;
 import com.modesettings.model.Rule;
 import com.modesettings.model.TimingsData;
 
@@ -196,18 +198,16 @@ public class Util {
 				setDateTimeOfAlarm(System.currentTimeMillis(), TaskMongoAlarmReceiver.NORMAL_MODE,
 						123456 , context, false);
 				Log.e("It's today, no rule is available so setting normal mode", "mode: NORMAL"  + " ,, id: 123456" );
+				BackgroundLocationService.PriorityCheck=true;
 			}else{
 			
 			for (int j = 0; j < timingsDataList.size(); j++) {
 				TimingsData timingData = timingsDataList.get(j);
-				long startTimings = timingData.getTimeInMillis(timingData
-						.getTimings());
+				long startTimings = timingData.getTimeInMillis(timingData.getTimings());
 
 				if (null == bookedUntilTime
 						|| getPriority(timingData.getMode()) >= getPriority(bookedUntilTime.getMode())
-						|| startTimings >= bookedUntilTime
-								.getTimeInMillis(bookedUntilTime
-										.getEndTimings())) {
+						|| startTimings >= bookedUntilTime.getTimeInMillis(bookedUntilTime.getEndTimings())) {
 
 					long curTime = System.currentTimeMillis();
 					
@@ -231,6 +231,7 @@ public class Util {
 							Log.e("shifted time", "one week forward");
 							startTimings = startTimings + milliSecondsForWeek;
 						}
+						BackgroundLocationService.PriorityCheck=false;
 						setDateTimeOfAlarm(startTimings, timingData.getMode(),
 									timingData.getTimingsDataId(), context, true);
 						
@@ -238,6 +239,7 @@ public class Util {
 								+ timingData.getTimings());
 						
 						bookedUntilTime = timingData;
+						
 					} else {
 						Rule selectedRule = null;
 						for (int x = 0; x < ruleList.size(); x++) {
@@ -261,13 +263,14 @@ public class Util {
 									Log.e("Alarm type: END, no further rule found and end time has already passed away", "mode: " +  TaskMongoAlarmReceiver.NORMAL_MODE + " ,, id: " + timingData.getTimingsDataId() + " ,time: "
 											+ timingData.getTimings());
 									dbHandler.saveAlarmData(timingData.getTimingsDataId() + TaskMongoAlarmReceiver.timeLapse);
-									
+									BackgroundLocationService.PriorityCheck=true;
 									setDateTimeOfAlarm(curTime, TaskMongoAlarmReceiver.NORMAL_MODE,
 											timingData.getTimingsDataId() + TaskMongoAlarmReceiver.timeLapse, context, false);
 								}
 								startTimings = startTimings + milliSecondsForWeek;
 								Log.e("shifted time", "one week forward");
 							}
+							BackgroundLocationService.PriorityCheck=true;
 							setDateTimeOfAlarm(startTimings,
 									TaskMongoAlarmReceiver.NORMAL_MODE,
 									timingData.getTimingsDataId(), context, true);
@@ -282,13 +285,14 @@ public class Util {
 									Log.e("Alarm type: END, rule found but starttime has already passed away", "mode: " + selectedRule.getMode() + " ,, id: " + timingData.getTimingsDataId() + " ,time: "
 											+ timingData.getTimings());
 									dbHandler.saveAlarmData(timingData.getTimingsDataId() + TaskMongoAlarmReceiver.timeLapse);
-									
+									BackgroundLocationService.PriorityCheck=true;
 									setDateTimeOfAlarm(curTime, selectedRule.getMode(),
 											timingData.getTimingsDataId() + TaskMongoAlarmReceiver.timeLapse, context, false);
 								}
 								startTimings = startTimings + milliSecondsForWeek;
 								Log.e("shifted time", "one week forward");
 							}
+							BackgroundLocationService.PriorityCheck=true;
 							setDateTimeOfAlarm(startTimings,
 									selectedRule.getMode(),
 									timingData.getTimingsDataId(), context, true);
@@ -297,6 +301,7 @@ public class Util {
 							bookedUntilTime.setMode(selectedRule.getMode());
 							bookedUntilTime.setTimings(selectedRule.getStartTime());
 							bookedUntilTime.setEndTimings(selectedRule.getEndTime());
+							
 						}
 					}
 				}

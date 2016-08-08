@@ -3,7 +3,7 @@ package com.modesettings.model;
 public class LocationDetails {
 
 	public Double latiDouble,logiDouble;
-	public String AddressName,LocationName,mode;
+	public String AddressName,LocationName,mode,radius;
 
 
 
@@ -45,6 +45,14 @@ public class LocationDetails {
 
 	public void setLogiDouble(Double logiDouble) {
 		this.logiDouble = logiDouble;
+	}
+
+	public String getRadius() {
+		return radius;
+	}
+
+	public void setRadius(String radius) {
+		this.radius = radius;
 	}
 	
 	
