@@ -69,6 +69,7 @@
                 android:layout_height="match_parent"
                 android:id="@+id/autotext_address"
                 android:hint="ENTER ORIGIN"
+                android:layout_marginLeft="5dp"
                 android:background="@null"
                 />
 
@@ -132,29 +133,29 @@
             android:orientation="horizontal" >
          
   <LinearLayout
-            android:layout_weight="5"
+            android:layout_weight="4"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+             android:gravity="center|end"
             android:orientation="vertical" >
             <TextView
                 android:textSize="16sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Select Radius:"
-                android:gravity="center"
                 android:textColor="@android:color/black" />
              <TextView
                 android:textSize="10sp"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="(In meters)"
-                android:gravity="center"
+                android:text="(In miles)"
+                android:visibility="visible"
                 android:textColor="@android:color/black" />
             </LinearLayout>
               <Spinner
                 android:id="@+id/spinnerRadius"
-                android:gravity="center"
-                android:layout_weight="5"
+                android:gravity="center|start"
+                android:layout_weight="6"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content" />
 

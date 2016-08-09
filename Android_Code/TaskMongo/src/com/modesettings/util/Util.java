@@ -270,6 +270,7 @@ public class Util {
 								startTimings = startTimings + milliSecondsForWeek;
 								Log.e("shifted time", "one week forward");
 							}
+							
 							BackgroundLocationService.PriorityCheck=true;
 							setDateTimeOfAlarm(startTimings,
 									TaskMongoAlarmReceiver.NORMAL_MODE,
@@ -285,14 +286,14 @@ public class Util {
 									Log.e("Alarm type: END, rule found but starttime has already passed away", "mode: " + selectedRule.getMode() + " ,, id: " + timingData.getTimingsDataId() + " ,time: "
 											+ timingData.getTimings());
 									dbHandler.saveAlarmData(timingData.getTimingsDataId() + TaskMongoAlarmReceiver.timeLapse);
-									BackgroundLocationService.PriorityCheck=true;
+									BackgroundLocationService.PriorityCheck=false;
 									setDateTimeOfAlarm(curTime, selectedRule.getMode(),
 											timingData.getTimingsDataId() + TaskMongoAlarmReceiver.timeLapse, context, false);
 								}
 								startTimings = startTimings + milliSecondsForWeek;
 								Log.e("shifted time", "one week forward");
 							}
-							BackgroundLocationService.PriorityCheck=true;
+							BackgroundLocationService.PriorityCheck=false;
 							setDateTimeOfAlarm(startTimings,
 									selectedRule.getMode(),
 									timingData.getTimingsDataId(), context, true);

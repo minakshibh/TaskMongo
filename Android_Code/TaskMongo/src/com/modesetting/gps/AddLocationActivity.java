@@ -2,6 +2,7 @@ package com.modesetting.gps;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.lang.reflect.Field;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
@@ -111,7 +112,8 @@ public class AddLocationActivity extends AppCompatActivity implements
 		// Step 3: Tell the spinner about our adapter
 	    SpRedius.setAdapter(spinnerArrayAdapter);
 	    SpRedius.setSelection(3);
-	}
+	 
+	   }
 
 	private void setUI() {
 		// TODO Auto-generated method stub
@@ -127,6 +129,7 @@ public class AddLocationActivity extends AppCompatActivity implements
 		txt_Save = (TextView) findViewById(R.id.txt_go);
 		btnBack = (TextView) findViewById(R.id.btnBack);
 		SpRedius=(Spinner)findViewById(R.id.spinnerRadius);
+	
 	}
 
 	private void setAddressAdapter() {
@@ -207,9 +210,10 @@ public class AddLocationActivity extends AppCompatActivity implements
 					}
 				});
 		SpRedius.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-			public void onItemSelected(AdapterView<?> arg0, View arg1,
+			public void onItemSelected(AdapterView<?> arg0, View view,
 					int position, long arg3) {
 				// TODO Auto-generated method stub
+			
 				selectRadiusValues=arrayListRadius.get(position);
 
 			}

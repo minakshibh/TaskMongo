@@ -41,8 +41,7 @@ public class ChangeAlarmModeService extends IntentService {
 			} else if (mode.equalsIgnoreCase(TaskMongoAlarmReceiver.NORMAL_MODE)) {
 				am.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
 				Log.e("ChangeAlarmModeService", mode + " set");
-			} else if (mode
-					.equalsIgnoreCase(TaskMongoAlarmReceiver.VIBRATE_MODE)) {
+			} else if (mode.equalsIgnoreCase(TaskMongoAlarmReceiver.VIBRATE_MODE)) {
 				am.setRingerMode(AudioManager.RINGER_MODE_VIBRATE);
 				Log.e("ChangeAlarmModeService", mode + " set");
 			}

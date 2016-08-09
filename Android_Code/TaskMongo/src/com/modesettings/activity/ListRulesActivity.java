@@ -28,6 +28,7 @@ import android.widget.Toast;
 import com.daimajia.swipe.adapters.BaseSwipeAdapter;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
+
 import com.google.android.gms.ads.AdView;
 import com.modesetting.gps.BackgroundLocationService;
 import com.modesetting.gps.ListLocationActivity;
